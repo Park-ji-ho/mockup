@@ -2,9 +2,9 @@
    screens.js — 신규 통합 계정 전환 5단계 흐름 마크업 SSOT
    메인 디자인: 실서비스(One ID) 스타일. Pleos Connect 토큰으로 구현(서브).
    SCREENS[step](state) => htmlString. 같은 HTML을 웹/앱 프레임에 동시 주입.
-   모든 버튼은 data-action, 토글 행은 data-acc/data-consent로 동작한다(showcase.js가 처리).
+   모든 버튼은 data-action, 동의 행은 data-consent로 동작한다(showcase.js가 처리).
    state = { step, theme, loading, error, dir, toast:{msg,variant}|null,
-             consents:{terms,privacy}, marketing, timerSec, warn }
+             consents:{terms,privacy}, marketing, code, timerSec, warn }
    ========================================================= */
 (function () {
   "use strict";
@@ -128,7 +128,7 @@
   function step3(state) {
     function acct(mark, name, sub) {
       return (
-        '<div class="oneid__acct oneid__acct--static">' +
+        '<div class="oneid__acct">' +
         '<span class="oneid__mark">' + mark + "</span>" +
         '<span class="oneid__acct-meta"><span class="oneid__acct-name">' + name + "</span>" +
         '<span class="oneid__acct-sub">' + sub + "</span></span>" +

@@ -124,7 +124,8 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 
 - Spacing scale: 4 / 8 / 12 / 16 / 20 / 24 / 32 / 40 (px). 컴포넌트 간 여백은 이 배수만 사용.
 - 관찰된 실측 여백: Toast side/bottom padding **24**, Spinner 컬럼 gap **24**·side pad **40**, Status bar safe-bounds **40**.
-- Radius: sm 8 / md 12 / lg 16 / xl 20 / full 999 (px). 버튼·카드는 md~lg, pill/토글은 full.
+- Radius: xs 6 / sm 8 / md 12 / lg 16 / xl 20 / full 999 (px). 버튼·카드는 md~lg, pill/토글은 full,
+  Checkbox·One ID 스킨은 xs.
 
 ### 2.4 Elevation (Shadow)
 
@@ -152,7 +153,7 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 
 ## 3. CSS 변수 (Web Adaptation)
 
-이 프로젝트가 실제로 사용하는 토큰 레이어. `css/style.css`의 `:root`에 정의하고 컴포넌트는 이 변수만 참조한다.
+이 프로젝트가 실제로 사용하는 토큰 레이어. `css/tokens.css`의 `:root`에 정의하고 컴포넌트는 이 변수만 참조한다.
 차량 디스플레이용 대형 타이포를 웹/모바일 스케일로 축소 매핑했다(위계·비율 유지).
 
 ```css
@@ -186,6 +187,8 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
   --success:#02C265; --info:#0064FF; --danger:#FE3D16; --accent:#5A46FA;
   /* Primary 강조 = 무채색. Pleos의 위계 표현은 basic 스케일(대비)로 한다 */
   --primary:var(--basic-900);
+  --primary-press:var(--basic-700);
+  --primary-weak:var(--basic-100);
 
   /* ---- Typography (web-scaled; Asta Sans는 tokens.css @font-face로 임베드) ---- */
   --font-sans:"Asta Sans",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Roboto,"Noto Sans KR",sans-serif;
@@ -200,7 +203,7 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-10:40px;
 
   /* ---- Radius ---- */
-  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-full:999px;
+  --r-xs:6px; --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-full:999px;
 
   /* ---- Elevation ---- */
   --shadow-1:0 6px 24px rgba(0,0,0,.08);
@@ -232,18 +235,21 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 
 ---
 
+> 그 외 `--app-max`, back-compat `--color-*`/`--shadow-sm|md|lg` 별칭, One ID 스킨 토큰(§5)은
+> `tokens.css`를 참조한다. 다크 블록은 `color-scheme: dark`도 함께 선언한다.
+
 ## 4. Components
 
 원본 컴포넌트의 **구조(anatomy)·상태(states)·옵션**을 그대로 채택한다. 웹에서 재현할 때 위 토큰만 사용한다.
 
 ### Button (Basic / Filled / Switch)
 - 상태: Enabled / Pressed / Disabled. Filled = 강조(`button_filled_*` = basic_600/700), Basic = 보조(alpha).
-- 웹 매핑: primary=`--primary`, filled 텍스트 #fff, disabled=`--text-quaternary` 위 `--surface-high`.
+- 웹 매핑: primary=`--primary`, filled 텍스트 `--basic-00`, disabled=`--text-quaternary` 위 `--surface-high`.
 
 ### Text Field (Fields)
 - Anatomy: Root · Field · Cursor · Place Holder · Suffix(Optional).
 - States: Value · Focused · Disabled · Read Only · Invalid.
-  시각: Enabled=회색 테두리 / Focused=블랙 테두리 / Typing=+clear(어두운 원형 X) /
+  시각: Enabled=회색 테두리 / Focused=진한 테두리(`--field-focused`=basic_700) / Typing=+clear(어두운 원형 X) /
   Entered / Error=레드 테두리+레드 헬퍼 텍스트 / Read only=회색 배경.
 - Type: Text·Tel·Url·Email·Password(도트 마스킹) · Size: Medium/Small.
 - Typing: 긴 텍스트는 좌측으로 밀림, 완료 시 끝 Truncate.
@@ -252,6 +258,10 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 - **자릿수별 개별 셀(segmented)** 구조. Anatomy: Root · Label(입력 숫자) · Cursor · Field(셀).
 - States: Enabled(빈 셀) / Focused(회색 채움+블랙 테두리+커서) / Entered(숫자) / Error(레드 테두리).
 - Size: Large/Medium. 인증번호 등 코드 입력에 사용.
+
+### Switch (Selections)
+- Anatomy: Root(트랙) · Knob. 52×30, `--r-full`, knob 24px(이동 22px).
+- States: On(트랙=`informative_active`) / Off(`--surface-accent`) / Disabled(40% 투명).
 
 ### Checkbox (Selections)
 - Anatomy: Root · Control · Icon(체크/대시). 다중 선택용.
@@ -279,7 +289,8 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 
 ### Controllers (Slider / Stepper)
 - **Continuous Slider**: Root·Control·Handle·Track·Icon(prefix/suffix)·Stepper. Mode: Basic / Floating.
-- **Centered Slider**: 중앙 기준 track(gradient 가능), ‹›버튼 없으면 margin 확대.
+- **Centered Slider**: 중앙 기준 track — 원본 온도 메타포의 blue→red gradient 재현(Informative
+  시맨틱 규칙의 문서화된 예외). ‹›버튼 없으면 margin 확대.
 - **Stepper**: `− │ value │ +`. 상태 Min(−disabled)/Mid/Max(+disabled). 실측 400×100, 값 영역 112.
 - Options: Disabled · MinValue · MaxValue · Step.
 
@@ -291,14 +302,15 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 - Anatomy: Root · Toast message. 화면 하단 **Center**, 화면 여백(좌/우/하단) **24**.
 - 실측: 배경 **#131417 @ 84%**(`--static-dark-200`, 테마 불변) · 텍스트 `--static-white` ·
   radius **16**(`--r-lg`) · 내부 패딩 상하 **24** / 좌우 **40** · 콘텐츠 max **712** (컨테이너 792).
-- Duration은 원본 미명시(구현 기본 2.4s).
+- Duration은 원본 미명시(구현 기본 2.4s). 확장: danger variant = `--danger` 배경(에러 피드백).
 
 ### System Notification
 - Anatomy: Root(흰 카드) · Imagery · Header(Title+Description) · Action(CTA + Sub action).
 - Type: App icon / Profile(통화·문자, 배지) / Image. Button Align: Single / Vertical / Horizontal. Call variant: 받기(green)/거절(red).
 
 ### Bar (Window / Scroll)
-- Window bar: 두 창 사이 핸들. Enabled opacity .2 → Pressed opacity .5·width 140→100px, `transform 300ms ease var(--ease-standard)`. Disabled opacity→0.
+- Window bar: 두 창 사이 핸들. Enabled opacity .2 → Pressed opacity .5 · 핸들 길이 140→100px
+  (세로 구현: height), `opacity/height 300ms var(--ease-standard)`. Disabled opacity→0.
 - Scroll bar: 창 우측. Enabled=gray-alpha-200, Pressed=gray-900.
 
 ### Widgets
@@ -322,9 +334,12 @@ Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
   선택 시 `.active` 강조. 버튼 클릭 → 단일 상태 객체 갱신 → 프리뷰 **라이브 렌더**.
 - **프리뷰 스테이지(`.stage`)** — 우측. Web/App 두 프레임에 같은 화면을 동기 렌더하되,
   캔버스에는 리모컨 **환경(Web/App) 토글**로 선택된 프레임 하나만 표시한다(`data-env`).
-- **테마 토글** — 전역 `data-theme`(light/dark). 초기값은 `prefers-color-scheme`, 이후 수동 우선.
+- **테마 토글** — 전역 `data-theme`(light/dark). 초기값은 **라이트 고정**(§5 One ID 스킨 규칙),
+  리모컨/URL 파라미터로만 전환한다.
 - **상태 피드백은 디바이스 화면 안에서** — 토스트·에러·로딩 오버레이는 프레임(디바이스) 내부에
   렌더한다. 쇼케이스 셸(브라우저 전역)에 띄우지 않는다.
+- **체크 위계** — 정적 확인 표시(예: 자동 조회된 계정의 ✓)는 무채색(`basic_900`),
+  **인터랙티브 선택 상태**(Checkbox checked·Switch on)만 `informative_active`(green)를 쓴다.
 
 ### 웹/앱 동시 렌더 규격
 - 각 프레임은 `container-type: inline-size` + 고정 폭(App 375px / Web ≥720px).

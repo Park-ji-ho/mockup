@@ -27,7 +27,7 @@
   width: 32px; height: 32px; margin-left: -6px;
   font-size: 20px; color: var(--text-primary); border-radius: var(--r-full);
 }
-.showcase__title { font-size: var(--fs-title-s); font-weight: var(--fw-bold); }
+.showcase__title { font-size: var(--fs-title-s); font-weight: var(--fw-extrabold); }
 .showcase__hint { margin-left: auto; font-size: var(--fs-label-s); color: var(--text-tertiary); }
 
 /* ---- Remote ---- */
@@ -46,7 +46,7 @@
 .remote::-webkit-scrollbar { display: none; }
 .remote__group {
   grid-column: 1 / -1;
-  font-size: 9px; font-weight: 700;
+  font-size: var(--fs-label-s); font-weight: 700;
   color: var(--primary);
   letter-spacing: 0.07em; text-transform: uppercase;
   padding: 8px 2px 2px;
@@ -116,7 +116,7 @@
 .stage[data-env="web"] .frame--app { display: none; }
 .stage[data-env="app"] .frame--web { display: none; }
 .frame__label {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  font-size: var(--fs-label-s); font-weight: 700; letter-spacing: 0.08em;
   color: var(--text-tertiary); text-transform: uppercase; text-align: center;
 }
 .frame__device {
@@ -167,7 +167,7 @@
 .oneid__brand b {
   display: block;
   font-size: var(--fs-title-s);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-extrabold);
   letter-spacing: 0.01em;
 }
 .oneid__brand span { font-size: var(--fs-body-s); color: var(--text-tertiary); }
@@ -229,8 +229,8 @@
   margin: var(--sp-4) 0 var(--sp-3);
   text-align: center;
   font-size: var(--fs-title-l);
-  font-weight: var(--fw-bold);
-  line-height: 1.4;
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-base);
 }
 .oneid__title--left { text-align: left; }
 .oneid__desc {
@@ -286,7 +286,6 @@
 }
 
 /* 버튼 스택 — One ID 스킨(블랙/아웃라인, r-sm) */
-.oneid__actions { display: flex; flex-direction: column; gap: var(--sp-3); margin-top: var(--sp-5); }
 .oneid .btn--filled {
   background: var(--oneid-btn-bg);
   color: var(--oneid-btn-fg);
@@ -305,7 +304,6 @@
 
 /* 입력 — Text/Number Field에 One ID 스킨(6px 라운드) 적용 */
 .oneid__field { margin-bottom: var(--sp-3); }
-.oneid .field__input,
 .oneid .tfield__input {
   background: var(--surface);
   border-color: var(--oneid-line);
@@ -316,18 +314,17 @@
   border-color: var(--oneid-line);
   border-radius: var(--oneid-radius);
 }
-.oneid .numfield__cell--focused { border-color: var(--basic-900); }
+.oneid .numfield__cell--focused { border-color: var(--field-focused); }
 .oneid .numfield--error .numfield__cell { border-color: var(--danger); }
 .oneid__numrow { display: flex; align-items: center; gap: var(--sp-3); }
 .oneid__numrow .oneid__timer { position: static; }
 .oneid__inline { display: flex; align-items: center; gap: var(--sp-2); position: relative; }
-.oneid__inline .field__input { flex: 1; }
+.oneid__inline .tfield { flex: 1; }
 .oneid__send { flex-shrink: 0; height: 52px; padding: 0 var(--sp-5); }
 .oneid__timer {
   position: absolute; right: var(--sp-4);
   font-size: var(--fs-body-s); color: var(--text-tertiary);
 }
-.oneid__error { margin: var(--sp-2) 0 0; font-size: var(--fs-label-m); color: var(--danger); }
 
 /* 계정 카드 */
 .oneid__acct-list { margin: var(--sp-5) 0 var(--sp-2); }
@@ -344,12 +341,12 @@
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: var(--r-sm);
   background: var(--basic-900); color: var(--basic-00);
-  font-size: var(--fs-label-m); font-weight: var(--fw-bold);
+  font-size: var(--fs-label-m); font-weight: var(--fw-extrabold);
 }
 .oneid__acct-meta { display: flex; flex-direction: column; min-width: 0; }
 .oneid__acct-name { font-size: var(--fs-body-m); font-weight: var(--fw-semibold); }
 .oneid__acct-sub { font-size: var(--fs-label-m); color: var(--text-tertiary); }
-.oneid__check { margin-left: auto; color: var(--basic-900); font-weight: var(--fw-bold); }
+.oneid__check { margin-left: auto; color: var(--basic-900); font-weight: var(--fw-extrabold); }
 
 /* 약관 및 동의 */
 .oneid__consent-list { margin: var(--sp-4) 0; }
@@ -362,11 +359,6 @@
   font-size: var(--fs-body-s);
 }
 .oneid__consent-label { font-weight: var(--fw-regular); color: var(--text-secondary); }
-.oneid__radio {
-  width: 18px; height: 18px; flex-shrink: 0;
-  border: 2px solid var(--surface-accent);
-  border-radius: var(--r-full);
-}
 
 /* 완료 */
 .oneid__done-circle {
@@ -487,7 +479,6 @@
   60% { transform: translateX(-4px); }
   80% { transform: translateX(4px); }
 }
-.oneid .field__input.is-invalid { border-color: var(--danger); }
 .oneid__consent--warn {
   border-color: var(--danger);
   animation: oneid-shake 0.4s ease;

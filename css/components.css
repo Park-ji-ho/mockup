@@ -30,7 +30,7 @@
 .btn--md { height: 52px; }
 .btn--block { width: 100%; }
 
-/* Filled = 강조 (button_filled_* = basic_600/700) */
+/* Filled = 강조 (--primary = basic_900, One ID 스킨과 동일 무채색) */
 .btn--filled { background: var(--primary); color: var(--basic-00); }
 .btn--filled:hover { background: var(--primary-press); }
 .btn--filled.is-pressed,
@@ -78,12 +78,12 @@
   width: 24px;
   height: 24px;
   border-radius: var(--r-full);
-  background: #fff;
+  background: var(--knob-switch);
   box-shadow: var(--shadow-1);
   transition: transform var(--dur-standard) var(--ease-standard);
 }
 .switch.is-on { background: var(--success); }
-.switch.is-on .switch__knob { transform: translateX(22px); }
+.switch.is-on .switch__knob { transform: translateX(22px); background: var(--knob-switch-on); }
 .switch.is-disabled { opacity: 0.4; pointer-events: none; }
 
 /* ---------------------------------------------------------
@@ -230,7 +230,7 @@
   display: inline-flex; align-items: center; justify-content: center;
   background: var(--primary-weak); color: var(--primary); font-size: 15px;
 }
-.pagenav__titles { display: flex; flex-direction: column; line-height: 1.2; }
+.pagenav__titles { display: flex; flex-direction: column; line-height: var(--lh-base); }
 .pagenav__title { font-size: var(--fs-title-s); font-weight: var(--fw-semibold); }
 .pagenav__subtitle { font-size: var(--fs-label-s); color: var(--text-tertiary); }
 .pagenav__menu { display: inline-flex; align-items: center; gap: var(--sp-1); }
@@ -259,7 +259,7 @@
 .slider__handle {
   position: absolute; top: 50%; transform: translate(-50%, -50%);
   width: 24px; height: 24px; border-radius: var(--r-full);
-  background: #fff; box-shadow: var(--shadow-2);
+  background: var(--knob-slider); box-shadow: var(--shadow-2);
   cursor: grab;
 }
 .slider__handle:active { cursor: grabbing; }
@@ -307,7 +307,7 @@
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 .tfield__input::placeholder { color: var(--text-quaternary); }
-.tfield__input:focus { border-color: var(--basic-900); }
+.tfield__input:focus { border-color: var(--field-focused); }
 .tfield__input.is-invalid { border-color: var(--danger); }
 .tfield__input:read-only { background: var(--surface-high); }
 .tfield__input:disabled { background: var(--surface-high); color: var(--text-quaternary); }
@@ -319,9 +319,9 @@
   width: 20px; height: 20px;
   display: inline-flex; align-items: center; justify-content: center;
   border: none; border-radius: var(--r-full);
-  background: var(--text-quaternary);
-  color: var(--basic-00);
-  font-size: 11px; line-height: 1;
+  background: var(--text-tertiary);
+  color: var(--surface);
+  font-size: var(--fs-label-s); line-height: 1;
   cursor: pointer;
 }
 .tfield__helper { margin: var(--sp-2) 0 0; font-size: var(--fs-label-s); color: var(--danger); }
@@ -345,7 +345,7 @@
 }
 .numfield--md .numfield__cell { width: 36px; height: 48px; font-size: var(--fs-body-l); }
 .numfield__cell--focused {
-  border-color: var(--basic-900);
+  border-color: var(--field-focused);
   background: var(--surface-high);
 }
 .numfield__cell--focused::after {
@@ -378,7 +378,7 @@
   width: 24px; height: 24px; flex-shrink: 0;
   display: inline-flex; align-items: center; justify-content: center;
   border: 2px solid color-mix(in srgb, var(--basic-900) 20%, transparent);
-  border-radius: var(--oneid-radius);
+  border-radius: var(--r-xs);
   background: transparent;
   color: transparent;
   font-size: 13px; font-weight: var(--fw-semibold); line-height: 1;
@@ -428,7 +428,7 @@
   display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);
 }
 .picker__value { font-size: var(--fs-body-m); color: var(--text-quaternary); }
-.picker__value--sel { color: var(--text-primary); font-weight: var(--fw-bold); }
+.picker__value--sel { color: var(--text-primary); font-weight: var(--fw-extrabold); }
 
 /* ---------------------------------------------------------
    Toast — dark, center, max 792, pad 24
@@ -449,7 +449,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .toast__text { max-width: 712px; }
-.toast--danger { background: var(--danger); color: #fff; }
+.toast--danger { background: var(--danger); color: var(--static-white); }
 
 /* ---------------------------------------------------------
    System Notification
@@ -478,8 +478,8 @@
 .sysnoti__actions--vertical { flex-direction: column; }
 .sysnoti__actions--vertical .btn { width: 100%; }
 .sysnoti__actions--single .btn { width: 100%; }
-.sysnoti__btn--accept { background: var(--success); color: #fff; }
-.sysnoti__btn--reject { background: var(--danger); color: #fff; }
+.sysnoti__btn--accept { background: var(--success); color: var(--static-white); }
+.sysnoti__btn--reject { background: var(--danger); color: var(--static-white); }
 
 /* ---------------------------------------------------------
    Bar — Window bar / Scroll bar

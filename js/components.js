@@ -23,7 +23,7 @@
     });
   }
 
-  /* ---- Toast ---- */
+  /* ---- Toast (갤러리 전용 — 쇼케이스는 디바이스 내 state 토스트만 사용) ---- */
   var toastTimer = null;
   function showToast(message, variant) {
     var host = document.getElementById("toast-host");
@@ -46,8 +46,9 @@
     }, 2400);
   }
 
-  /* ---- Delegated interactions ---- */
+  /* ---- Delegated interactions (갤러리 전용 — 쇼케이스 프레임은 showcase.js가 처리) ---- */
   document.addEventListener("click", function (e) {
+    if (e.target.closest(".frame__viewport")) return;
     // Dropdown trigger
     var trig = e.target.closest(".dropdown__trigger");
     if (trig) {

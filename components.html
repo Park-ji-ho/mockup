@@ -12,7 +12,7 @@
       body { background: var(--bg-primary); }
       .gallery { max-width: 1000px; margin: 0 auto; padding: var(--sp-8) var(--sp-6) var(--sp-10); }
       .gallery__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-8); }
-      .gallery__head h1 { font-size: var(--fs-headline-l); font-weight: var(--fw-bold); margin: 0; }
+      .gallery__head h1 { font-size: var(--fs-headline-l); font-weight: var(--fw-extrabold); margin: 0; }
       .gallery__sub { color: var(--text-tertiary); font-size: var(--fs-body-s); margin-top: var(--sp-1); }
       .sec { margin-bottom: var(--sp-8); padding-bottom: var(--sp-6); border-bottom: 1px solid var(--border); }
       .sec > h2 { font-size: var(--fs-title-m); font-weight: var(--fw-semibold); margin: 0 0 var(--sp-2); }
@@ -79,6 +79,8 @@
           <p class="tfield__helper" style="margin: 0">Please enter a valid email format</p>
           <span class="tfield"><input class="tfield__input" value="Read only" readonly /></span>
           <span class="tfield"><input class="tfield__input" type="password" value="•••••" /></span>
+          <span class="tfield tfield--sm"><input class="tfield__input" placeholder="Small" /></span>
+          <span class="tfield"><input class="tfield__input" value="Disabled" disabled /></span>
         </div>
       </section>
 
@@ -112,6 +114,7 @@
         <div class="row">
           <span class="checkbox"><span class="checkbox__box">✓</span>미체크</span>
           <span class="checkbox is-checked"><span class="checkbox__box">✓</span>체크</span>
+          <span class="checkbox is-pressed"><span class="checkbox__box">✓</span>눌림</span>
           <span class="checkbox is-disabled"><span class="checkbox__box">✓</span>비활성</span>
           <span class="checkbox is-disabled is-checked"><span class="checkbox__box">✓</span>체크+비활성</span>
         </div>

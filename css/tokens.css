@@ -22,6 +22,8 @@
 
   /* ---- Semantic (Light) ---- */
   --bg-primary: var(--basic-50);
+  --bg-secondary: var(--basic-00);
+  --bg-popup: var(--basic-00);
   --surface: var(--basic-00);
   --surface-low: var(--basic-50);
   --surface-high: var(--basic-100);
@@ -31,6 +33,8 @@
   --text-secondary: rgba(19, 20, 23, 0.84);
   --text-tertiary: rgba(19, 20, 23, 0.64);
   --text-quaternary: rgba(19, 20, 23, 0.32);
+  --field-bg: var(--basic-00);
+  --field-focused: var(--basic-700);
 
   /* ---- Informative accents — 상태 시맨틱 전용(성공/정보/오류). 일반 강조에 쓰지 않는다 ---- */
   --success: #02c265; --info: #0064ff; --danger: #fe3d16; --accent: #5a46fa;
@@ -54,8 +58,8 @@
   --fs-label-m: 13px; --fs-label-s: 12px;                              /* 24/20 */
   --lh-base: 1.5;                       /* 가독성: line-height ≥ 1.5 */
   --fw-extrabold: 800;                  /* Headline/Title: Extra Bold */
-  --fw-bold: 800;                       /* (기존 별칭) = Extra Bold */
-  --fw-semibold: 700;                   /* Headline/Title: Bold */
+  --fw-bold: 700;                       /* Headline/Title: Bold */
+  --fw-semibold: 700;                   /* (구명칭 별칭 = Bold, 점진 폐기) */
   --fw-strong: 600;                     /* Body: Strong */
   --fw-regular: 400;                    /* Body/Label: Normal */
 
@@ -64,7 +68,7 @@
   --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
 
   /* ---- Radius ---- */
-  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-full: 999px;
+  --r-xs: 6px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-full: 999px;
 
   /* ---- Elevation ---- */
   --shadow-1: 0 6px 24px rgba(0, 0, 0, 0.08);
@@ -81,8 +85,14 @@
   /* ---- Layout ---- */
   --app-max: 480px;
 
+  /* ---- Component knobs (원본: knob_off=basic_00/basic_400 · knob_on=basic_00/basic_900 ·
+     slider_knob=basic_00/alpha_dark_300) ---- */
+  --knob-switch: var(--basic-00);
+  --knob-switch-on: var(--basic-00);
+  --knob-slider: var(--basic-00);
+
   /* ---- One ID 스킨 (실서비스 스타일 매핑 — DESIGN.md §5) ---- */
-  --oneid-radius: 6px;                 /* 버튼/입력/카드 라운드 */
+  --oneid-radius: var(--r-xs);         /* 버튼/입력/카드 라운드 (6px) */
   --oneid-btn-bg: var(--basic-900);    /* 블랙 필 버튼 */
   --oneid-btn-fg: var(--basic-00);
   --oneid-btn-h: 52px;
@@ -119,4 +129,8 @@
   --success: #00e074; --info: #0082ff; --danger: #ff4c28; --accent: #6a57ff;
   --surface: var(--basic-50);
   --surface-low: var(--basic-00);
+  --bg-popup: var(--basic-100);
+  --knob-switch: var(--basic-400);
+  --knob-switch-on: var(--basic-900);
+  --knob-slider: rgba(19, 20, 23, 0.3); /* alpha_dark_300(다크) */
 }

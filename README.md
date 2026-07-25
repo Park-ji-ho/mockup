@@ -19,7 +19,7 @@ mockup/
 ├── css/
 │   ├── tokens.css        # 디자인 토큰 레이어(최초 로드)
 │   ├── style.css         # 베이스 리셋 + 앱 셸
-│   ├── components.css     # 컴포넌트 라이브러리
+│   ├── components.css    # 컴포넌트 라이브러리
 │   └── showcase.css      # 쇼케이스 셸 + One ID 흐름 @container
 ├── js/                   # screens/showcase/components/main
 ├── README.md

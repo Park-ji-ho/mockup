@@ -1,7 +1,7 @@
 /* =========================================================
    showcase.js — 시나리오 리모컨 + 웹/앱 동시 라이브 렌더 + 인터랙션
    단일 상태(scenario)를 두 프레임에 같은 HTML로 주입.
-   목업 내부 버튼(data-action)·토글(data-acc/data-consent)도 같은 상태를
+   목업 내부 버튼(data-action)·동의 행(data-consent)도 같은 상태를
    갱신하므로, 화면에서 이동해도 왼쪽 리모컨이 자동 동기화된다.
    ========================================================= */
 (function () {
@@ -157,7 +157,7 @@
     scenario.dir = ""; // 전환 애니메이션은 1회만
   }
 
-  /* ---- 목업 내부 인터랙션 (data-action / data-acc / data-consent) ---- */
+  /* ---- 목업 내부 인터랙션 (data-action / data-goto / data-consent) ---- */
   var ACTIONS = {
     start: function () { withLoading(600, function () { setStep(2); }); },
     later: function () { toast("다음에 다시 안내해 드릴게요."); },
