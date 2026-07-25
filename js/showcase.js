@@ -200,6 +200,15 @@
           if (fn && !actEl.disabled) fn();
           return;
         }
+        var dot = e.target.closest("[data-goto]");
+        if (dot) {
+          var n = parseInt(dot.dataset.goto, 10);
+          if (n !== scenario.step) {
+            setStep(n);
+            render();
+          }
+          return;
+        }
         var con = e.target.closest("[data-consent]");
         if (con) {
           var key = con.dataset.consent;

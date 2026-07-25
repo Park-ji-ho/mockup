@@ -19,8 +19,11 @@
   function dots(step) {
     var out = "";
     for (var i = 1; i <= 5; i++) {
-      if (i === step) out += '<span class="oneid__dot oneid__dot--now">' + i + "</span>";
-      else out += '<span class="oneid__dot' + (i < step ? " oneid__dot--done" : "") + '"></span>';
+      if (i === step) out += '<span class="oneid__dot oneid__dot--now" data-goto="' + i + '">' + i + "</span>";
+      else
+        out +=
+          '<span class="oneid__dot' + (i < step ? " oneid__dot--done" : "") +
+          '" data-goto="' + i + '" title="' + i + '단계로 이동"></span>';
     }
     return '<div class="oneid__dots">' + out + "</div>";
   }

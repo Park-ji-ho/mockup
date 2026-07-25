@@ -193,7 +193,11 @@
   width: var(--oneid-dot); height: var(--oneid-dot);
   border-radius: var(--r-full);
   background: var(--surface-accent);
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
 }
+.oneid__dot:hover { transform: scale(1.3); background: var(--basic-400); }
+.oneid__dot--done:hover { background: var(--basic-700); }
 .oneid__dot--done { background: var(--basic-900); }
 .oneid__dot--now {
   width: var(--oneid-dot-now); height: var(--oneid-dot-now);
