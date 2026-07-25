@@ -65,7 +65,7 @@
 }
 .remote-btn:hover { background: var(--surface-low); color: var(--text-primary); }
 .remote-btn.active {
-  background: var(--primary); border-color: var(--primary); color: #fff;
+  background: var(--primary); border-color: var(--primary); color: var(--basic-00);
   box-shadow: var(--shadow-2);
 }
 .remote-btn:active { transform: scale(0.93); }
@@ -265,14 +265,14 @@
   padding: var(--sp-4);
   border-radius: var(--oneid-radius);
   background: var(--primary-weak);
-  color: var(--info);
+  color: var(--text-secondary);
   font-size: var(--fs-body-s);
   text-align: center;
   line-height: 1.55;
 }
 .oneid__notice--fill {
-  background: var(--info);
-  color: #fff;
+  background: var(--basic-900);
+  color: var(--basic-00);
   font-weight: var(--fw-semibold);
 }
 
@@ -330,7 +330,7 @@
 .oneid__acct-meta { display: flex; flex-direction: column; min-width: 0; }
 .oneid__acct-name { font-size: var(--fs-body-m); font-weight: var(--fw-semibold); }
 .oneid__acct-sub { font-size: var(--fs-label-m); color: var(--text-tertiary); }
-.oneid__check { margin-left: auto; color: var(--info); font-weight: var(--fw-bold); }
+.oneid__check { margin-left: auto; color: var(--basic-900); font-weight: var(--fw-bold); }
 
 /* 약관 및 동의 */
 .oneid__consent-list { margin: var(--sp-4) 0; }
@@ -354,17 +354,17 @@
   width: 88px; height: 88px;
   margin: var(--sp-8) auto var(--sp-2);
   display: flex; align-items: center; justify-content: center;
-  border: 3px solid var(--info);
+  border: 3px solid var(--basic-900);
   border-radius: var(--r-full);
-  color: var(--info);
+  color: var(--basic-900);
   font-size: 40px;
 }
 .oneid__bubble {
   margin: var(--sp-5) 0 var(--sp-2);
   padding: var(--sp-3) var(--sp-4);
-  border: 1px solid var(--info);
+  border: 1px solid var(--basic-900);
   border-radius: var(--r-md);
-  color: var(--info);
+  color: var(--text-primary);
   font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
   text-align: center;
   line-height: 1.55;

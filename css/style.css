@@ -272,7 +272,7 @@ ol {
 
 .steps__item--active .steps__num {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--basic-00);
   border-color: var(--color-primary);
 }
 
@@ -431,7 +431,7 @@ ol {
 
 .btn--primary {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--basic-00);
 }
 
 .btn--primary:hover {

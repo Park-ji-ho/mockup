@@ -173,9 +173,10 @@
   --field-bg:var(--basic-00);
   --field-focused:var(--basic-700);
 
-  /* ---- Color: Informative (semantic accents) ---- */
+  /* ---- Color: Informative — 상태 시맨틱 전용(성공/정보/오류). 일반 강조 금지 ---- */
   --success:#02C265; --info:#0064FF; --danger:#FE3D16; --accent:#5A46FA;
-  --primary:var(--info);               /* 웹 목업의 기본 강조색 = informative_positive */
+  /* Primary 강조 = 무채색. Pleos의 위계 표현은 basic 스케일(대비)로 한다 */
+  --primary:var(--basic-900);
 
   /* ---- Typography (web-scaled; family는 Asta Sans 미탑재 시 fallback) ---- */
   --font-sans:"Asta Sans",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Roboto,"Noto Sans KR",sans-serif;
@@ -321,7 +322,8 @@
 - 단계 표시는 **숫자 도트 인디케이터** — 현재 = 숫자 블랙 서클(24px), 지난 단계 = 블랙 도트, 남은
   단계 = 회색 도트(8px).
 - 타이틀/설명은 중앙 정렬, 보조 설명은 `--text-tertiary`.
-- 파랑(`--info`)은 링크·안내 박스(`--primary-weak` 배경)·완료 강조에만 사용. 버튼은 블랙.
+- **색 사용 원칙(중요)**: 강조·선택·버튼·인디케이터는 전부 **무채색(basic 스케일)**. Informative
+  색(`--info`/`--success`/`--danger`)은 오류·성공 등 **상태 피드백에만** 쓴다. 일반 UI에 파랑 금지.
 - **기본 테마는 라이트.** 시스템 다크 모드를 따라가지 않으며, 다크는 리모컨/토글로만 전환한다.
 
 ### 미리보기 (프리뷰 모드)

@@ -22,11 +22,13 @@
   --text-tertiary: rgba(19, 20, 23, 0.64);
   --text-quaternary: rgba(19, 20, 23, 0.32);
 
-  /* ---- Informative accents ---- */
+  /* ---- Informative accents — 상태 시맨틱 전용(성공/정보/오류). 일반 강조에 쓰지 않는다 ---- */
   --success: #02c265; --info: #0064ff; --danger: #fe3d16; --accent: #5a46fa;
-  --primary: var(--info);
-  --primary-press: #1f56e0;
-  --primary-weak: #eaf0ff;
+
+  /* ---- Primary 강조 = 무채색 (Pleos 위계: basic 스케일. 파랑 아님) ---- */
+  --primary: var(--basic-900);
+  --primary-press: var(--basic-700);
+  --primary-weak: var(--basic-100);
 
   /* ---- Typography (web-scaled) ---- */
   --font-sans: "Asta Sans", -apple-system, BlinkMacSystemFont,
@@ -98,5 +100,4 @@
   --success: #00e074; --info: #0082ff; --danger: #ff4c28; --accent: #6a57ff;
   --surface: var(--basic-50);
   --surface-low: var(--basic-00);
-  --primary-weak: rgba(0, 130, 255, 0.16);
 }

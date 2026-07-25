@@ -31,7 +31,7 @@
 .btn--block { width: 100%; }
 
 /* Filled = 강조 (button_filled_* = basic_600/700) */
-.btn--filled { background: var(--primary); color: #fff; }
+.btn--filled { background: var(--primary); color: var(--basic-00); }
 .btn--filled:hover { background: var(--primary-press); }
 .btn--filled.is-pressed,
 .btn--filled:active { background: var(--primary-press); }
@@ -53,7 +53,7 @@
 }
 
 /* Back-compat: 기존 .btn--primary는 filled로 동작 */
-.btn--primary { background: var(--primary); color: #fff; }
+.btn--primary { background: var(--primary); color: var(--basic-00); }
 .btn--primary:hover { background: var(--primary-press); }
 .btn--ghost { background: var(--surface-low); color: var(--text-primary); }
 
