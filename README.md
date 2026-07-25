@@ -17,9 +17,16 @@ mockup/
 ├── js/               # 스크립트
 ├── assets/           # 이미지, 폰트 등 정적 리소스
 ├── README.md
+├── DESIGN.md         # 디자인 시스템 (SSOT) — 모든 UI가 따름
 ├── CLAUDE.md
 └── AGENTS.md
 ```
+
+## 디자인 시스템
+
+모든 UI는 [`DESIGN.md`](DESIGN.md)의 토큰·원칙을 따른다. 색상·타이포·간격·라운드·그림자·
+모션은 DESIGN.md에 정의된 CSS 변수만 사용한다. (Pleos Connect UI Design Guide를 웹/모바일에
+맞게 적응)
 
 ## 로컬 실행
 
