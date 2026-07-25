@@ -3,6 +3,16 @@
    모든 페이지가 가장 먼저 로드한다. 값 정의는 DESIGN.md 참고.
    컴포넌트/페이지 CSS는 이 변수만 참조하며, 여기 외에서 토큰을 재정의하지 않는다.
    ========================================================= */
+
+/* Asta Sans — Pleos 공식 서체 (한글·영문 지원, OFL 라이선스, 가변 100~900) */
+@font-face {
+  font-family: "Asta Sans";
+  src: url("../assets/fonts/AstaSans-VariableFont_wght.ttf") format("truetype-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* ---- Basic scale (Light) ---- */
   --basic-00: #ffffff; --basic-50: #f7f8fa; --basic-100: #edeef2;
@@ -25,18 +35,29 @@
   /* ---- Informative accents — 상태 시맨틱 전용(성공/정보/오류). 일반 강조에 쓰지 않는다 ---- */
   --success: #02c265; --info: #0064ff; --danger: #fe3d16; --accent: #5a46fa;
 
+  /* ---- Static (테마 불변 — Overlay/Toast 등 위에 얹히는 요소) ---- */
+  --static-dark-200: rgba(19, 20, 23, 0.84);  /* basic_static_dark_200 — Toast 배경 */
+  --static-white: #ffffff;                     /* basic_static_light_100 */
+
   /* ---- Primary 강조 = 무채색 (Pleos 위계: basic 스케일. 파랑 아님) ---- */
   --primary: var(--basic-900);
   --primary-press: var(--basic-700);
   --primary-weak: var(--basic-100);
 
-  /* ---- Typography (web-scaled) ---- */
+  /* ---- Typography — Pleos Typography 스케일 (web-scaled, 위계·비율 유지) ----
+     Headline·Title: Extra Bold/Bold · Body: Strong/Normal · Label: Normal */
   --font-sans: "Asta Sans", -apple-system, BlinkMacSystemFont,
     "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-  --fs-headline-l: 32px; --fs-title-l: 22px; --fs-title-m: 20px; --fs-title-s: 18px;
-  --fs-body-l: 16px; --fs-body-m: 15px; --fs-body-s: 14px;
-  --fs-label-m: 13px; --fs-label-s: 12px;
-  --fw-bold: 800; --fw-semibold: 700; --fw-regular: 400;
+  --fs-headline-l: 32px; --fs-headline-m: 30px; --fs-headline-s: 26px; /* 60/56/48 */
+  --fs-title-l: 22px; --fs-title-m: 20px; --fs-title-s: 18px;          /* 40/36/32 */
+  --fs-body-l: 16px; --fs-body-m: 15px; --fs-body-s: 14px;             /* 30/28/26 */
+  --fs-label-m: 13px; --fs-label-s: 12px;                              /* 24/20 */
+  --lh-base: 1.5;                       /* 가독성: line-height ≥ 1.5 */
+  --fw-extrabold: 800;                  /* Headline/Title: Extra Bold */
+  --fw-bold: 800;                       /* (기존 별칭) = Extra Bold */
+  --fw-semibold: 700;                   /* Headline/Title: Bold */
+  --fw-strong: 600;                     /* Body: Strong */
+  --fw-regular: 400;                    /* Body/Label: Normal */
 
   /* ---- Spacing ---- */
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;

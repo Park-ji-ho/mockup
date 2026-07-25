@@ -17,6 +17,7 @@
     error: false,
     dir: "", // 단계 전환 애니메이션 방향 (fwd/back), 렌더 후 소거
     toast: null, // {msg, variant} — 디바이스 화면 안에서 표시
+    code: "", // 인증번호(Number Field, 최대 6자리)
     consents: { terms: true, privacy: true },
     marketing: false,
     warn: false, // 필수 동의 미체크 강조
@@ -165,13 +166,27 @@
     send: function () {
       scenario.timerSec = TIMER_MAX;
       scenario.error = false;
+      scenario.code = "";
       toast("인증번호를 발송했습니다.");
       render();
+    },
+    "clear-field": function (el) {
+      var input = el.closest(".tfield") && el.closest(".tfield").querySelector(".tfield__input");
+      if (input) { input.value = ""; input.focus(); }
     },
     verify: function () {
       if (scenario.error) {
         toast("인증번호를 다시 확인해 주세요.", "danger");
         render(); // is-shake 재생
+        return;
+      }
+      if (scenario.code.length < 6) {
+        toast("인증번호 6자리를 입력해 주세요.", "danger");
+        document.querySelectorAll("[data-numfield]").forEach(function (n) {
+          n.classList.remove("is-shake");
+          void n.offsetWidth; // reflow로 애니메이션 재시작
+          n.classList.add("is-shake");
+        });
         return;
       }
       withLoading(500, function () { setStep(3); });
@@ -193,11 +208,26 @@
 
   function wireFrames() {
     [appFrame, webFrame].forEach(function (frame) {
+      // Number Field: 셀 클릭 → 숨은 입력 포커스 / 입력 → 상태 갱신 후 셀 동기 렌더
+      frame.addEventListener("input", function (e) {
+        if (!e.target.classList.contains("numfield__hidden")) return;
+        scenario.code = e.target.value.replace(/\D/g, "").slice(0, 6);
+        scenario.error = false;
+        render();
+        var vis = scenario.env === "app" ? appFrame : webFrame;
+        var hid = vis.querySelector(".numfield__hidden");
+        if (hid) { hid.value = scenario.code; hid.focus(); }
+      });
       frame.addEventListener("click", function (e) {
+        var nf = e.target.closest("[data-numfield]");
+        if (nf) {
+          var hid = nf.querySelector(".numfield__hidden");
+          if (hid) hid.focus();
+        }
         var actEl = e.target.closest("[data-action]");
         if (actEl && frame.contains(actEl)) {
           var fn = ACTIONS[actEl.dataset.action];
-          if (fn && !actEl.disabled) fn();
+          if (fn && !actEl.disabled) fn(actEl);
           return;
         }
         var dot = e.target.closest("[data-goto]");

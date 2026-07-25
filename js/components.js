@@ -97,6 +97,12 @@
       stepper.querySelector('[data-dir="up"]').disabled = cur >= max;
       return;
     }
+    // Checkbox
+    var cb = e.target.closest(".checkbox");
+    if (cb && !cb.classList.contains("is-disabled")) {
+      cb.classList.toggle("is-checked");
+      return;
+    }
     // Switch
     var sw = e.target.closest(".switch");
     if (sw && !sw.classList.contains("is-disabled")) {

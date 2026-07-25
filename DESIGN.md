@@ -101,8 +101,13 @@
 
 ### 2.2 Typography
 
-폰트: **Asta Sans** (원본). 웹에서는 시스템 폰트 스택으로 대체 가능(아래 CSS 변수 참조).
-최소 크기 12px 이상, 실제 높이 18px 이상, line-height ≥ 1.5. 캐릭터 강한 폰트 지양.
+폰트: **Asta Sans** — 공식 서체를 저장소에 임베드했다(`assets/fonts/AstaSans-VariableFont_wght.ttf`,
+가변 100~900, 한글·영문 지원, OFL 라이선스). `tokens.css`의 `@font-face`로 로드되며 모든 페이지에
+적용된다. 미로드 시 Apple SD Gothic Neo/Pretendard 폴백.
+최소 크기 12px 이상, 실제 높이 18px 이상, line-height ≥ 1.5(`--lh-base`). 캐릭터 강한 폰트 지양.
+
+**Weight 매핑** — Headline·Title: Extra Bold(`--fw-extrabold` 800) / Bold(`--fw-semibold` 700) ·
+Body: Strong(`--fw-strong` 600) / Normal(`--fw-regular` 400) · Label: Normal.
 
 | Role | Scale | Size(px) | Weight |
 |---|---|---|---|
@@ -173,19 +178,23 @@
   --field-bg:var(--basic-00);
   --field-focused:var(--basic-700);
 
+  /* ---- Color: Static (테마 불변) ---- */
+  --static-dark-200:rgba(19,20,23,.84);  /* Toast 배경 */
+  --static-white:#FFFFFF;
+
   /* ---- Color: Informative — 상태 시맨틱 전용(성공/정보/오류). 일반 강조 금지 ---- */
   --success:#02C265; --info:#0064FF; --danger:#FE3D16; --accent:#5A46FA;
   /* Primary 강조 = 무채색. Pleos의 위계 표현은 basic 스케일(대비)로 한다 */
   --primary:var(--basic-900);
 
-  /* ---- Typography (web-scaled; family는 Asta Sans 미탑재 시 fallback) ---- */
+  /* ---- Typography (web-scaled; Asta Sans는 tokens.css @font-face로 임베드) ---- */
   --font-sans:"Asta Sans",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",Roboto,"Noto Sans KR",sans-serif;
   --fs-headline-l:32px; --fs-headline-m:30px; --fs-headline-s:26px; /* 60/56/48 → 축소 */
   --fs-title-l:22px;    --fs-title-m:20px;    --fs-title-s:18px;    /* 40/36/32 */
   --fs-body-l:16px;     --fs-body-m:15px;     --fs-body-s:14px;     /* 30/28/26 */
   --fs-label-m:13px;    --fs-label-s:12px;    /* 24/20 */
   --lh-base:1.5;
-  --fw-bold:800; --fw-semibold:700; --fw-regular:400;
+  --fw-extrabold:800; --fw-bold:800; --fw-semibold:700; --fw-strong:600; --fw-regular:400;
 
   /* ---- Spacing ---- */
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-10:40px;
@@ -231,6 +240,26 @@
 - 상태: Enabled / Pressed / Disabled. Filled = 강조(`button_filled_*` = basic_600/700), Basic = 보조(alpha).
 - 웹 매핑: primary=`--primary`, filled 텍스트 #fff, disabled=`--text-quaternary` 위 `--surface-high`.
 
+### Text Field (Fields)
+- Anatomy: Root · Field · Cursor · Place Holder · Suffix(Optional).
+- States: Value · Focused · Disabled · Read Only · Invalid.
+  시각: Enabled=회색 테두리 / Focused=블랙 테두리 / Typing=+clear(어두운 원형 X) /
+  Entered / Error=레드 테두리+레드 헬퍼 텍스트 / Read only=회색 배경.
+- Type: Text·Tel·Url·Email·Password(도트 마스킹) · Size: Medium/Small.
+- Typing: 긴 텍스트는 좌측으로 밀림, 완료 시 끝 Truncate.
+
+### Number Field (Fields)
+- **자릿수별 개별 셀(segmented)** 구조. Anatomy: Root · Label(입력 숫자) · Cursor · Field(셀).
+- States: Enabled(빈 셀) / Focused(회색 채움+블랙 테두리+커서) / Entered(숫자) / Error(레드 테두리).
+- Size: Large/Medium. 인증번호 등 코드 입력에 사용.
+
+### Checkbox (Selections)
+- Anatomy: Root · Control · Icon(체크/대시). 다중 선택용.
+- States: Checked · Pressed · Disabled.
+- 실측(IVI 48×48·r12·border4 → 웹 1/2 스케일 24×24·r6·border2):
+  미체크 border=`basic_900 @20%` / **checked 배경=informative_active(green)+흰 체크** /
+  pressed 오버레이=`basic_900 @10%` / disabled=5~10% 알파, 체크 흰색 64%.
+
 ### Dropdown
 - Anatomy: Root · Label · Prefix(App Icon/Icon) · Suffix(Chevron/Switch) · Container(열린 목록).
 - States: Opened · Pressed · Disabled. Size: Medium / Small. 선택 항목엔 체크 표시.
@@ -258,9 +287,11 @@
 - Anatomy: Root · Selection Value(중앙 강조) · Contents(스크롤 컬럼).
 - Type: Date / Time. 선택행=흰/굵게 위 하이라이트 바, 거리감 fade. (실측: Date 568w, Time 468×384, gap 24, pad 40)
 
-### Toast
-- Anatomy: Root(어두운 rounded) · Toast message(흰 텍스트). Center 정렬.
-- 실측: side/bottom padding **24**, max width **792**, 텍스트 max **712**.
+### Toast Popup
+- Anatomy: Root · Toast message. 화면 하단 **Center**, 화면 여백(좌/우/하단) **24**.
+- 실측: 배경 **#131417 @ 84%**(`--static-dark-200`, 테마 불변) · 텍스트 `--static-white` ·
+  radius **16**(`--r-lg`) · 내부 패딩 상하 **24** / 좌우 **40** · 콘텐츠 max **712** (컨테이너 792).
+- Duration은 원본 미명시(구현 기본 2.4s).
 
 ### System Notification
 - Anatomy: Root(흰 카드) · Imagery · Header(Title+Description) · Action(CTA + Sub action).

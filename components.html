@@ -65,6 +65,58 @@
         </div>
       </section>
 
+      <!-- Text Field -->
+      <section class="sec">
+        <h2>Text Field</h2>
+        <p>Enabled · Focused · Typing(+clear) · Error(+helper) · Read only · Password</p>
+        <div class="row" style="flex-direction: column; align-items: stretch; max-width: 360px">
+          <span class="tfield"><input class="tfield__input" placeholder="Place holder" /></span>
+          <span class="tfield">
+            <input class="tfield__input" value="Typing" />
+            <button class="tfield__clear" title="지우기">✕</button>
+          </span>
+          <span class="tfield"><input class="tfield__input is-invalid" value="jiho@email" /></span>
+          <p class="tfield__helper" style="margin: 0">Please enter a valid email format</p>
+          <span class="tfield"><input class="tfield__input" value="Read only" readonly /></span>
+          <span class="tfield"><input class="tfield__input" type="password" value="•••••" /></span>
+        </div>
+      </section>
+
+      <!-- Number Field -->
+      <section class="sec">
+        <h2>Number Field</h2>
+        <p>자릿수별 셀 · Enabled · Focused · Entered · Error · Large/Medium</p>
+        <div class="row">
+          <div class="numfield">
+            <span class="numfield__cell">3</span>
+            <span class="numfield__cell numfield__cell--focused"></span>
+            <span class="numfield__cell"></span>
+            <span class="numfield__cell"></span>
+          </div>
+          <div class="numfield numfield--error">
+            <span class="numfield__cell">3</span>
+            <span class="numfield__cell">1</span>
+          </div>
+          <div class="numfield numfield--md">
+            <span class="numfield__cell">7</span>
+            <span class="numfield__cell numfield__cell--focused"></span>
+            <span class="numfield__cell"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Checkbox -->
+      <section class="sec">
+        <h2>Checkbox</h2>
+        <p>checked = informative_active(green) · Enabled·Pressed·Disabled</p>
+        <div class="row">
+          <span class="checkbox"><span class="checkbox__box">✓</span>미체크</span>
+          <span class="checkbox is-checked"><span class="checkbox__box">✓</span>체크</span>
+          <span class="checkbox is-disabled"><span class="checkbox__box">✓</span>비활성</span>
+          <span class="checkbox is-disabled is-checked"><span class="checkbox__box">✓</span>체크+비활성</span>
+        </div>
+      </section>
+
       <!-- Dropdown -->
       <section class="sec">
         <h2>Dropdown</h2>

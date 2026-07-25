@@ -81,21 +81,39 @@
     return shell(1, state, main, footer);
   }
 
-  /* ---- STEP 2 · 이메일 인증 ---- */
+  /* ---- STEP 2 · 이메일 인증 ----
+     Text Field(§4: Typing 상태 clear 버튼) + Number Field(§4: 자릿수별 셀) */
   function step2(state) {
+    var code = state.code || "";
+    function numCells() {
+      var out = "";
+      for (var i = 0; i < 6; i++) {
+        var ch = code.charAt(i);
+        var cls = "numfield__cell";
+        if (!ch && i === code.length && !state.error) cls += " numfield__cell--focused";
+        out += '<span class="' + cls + '">' + ch + "</span>";
+      }
+      return out;
+    }
     var main =
       '<h2 class="oneid__title">이메일 인증</h2>' +
       '<p class="oneid__desc">Pleos 계정에 사용할<br />이메일을 인증해 주세요</p>' +
       '<div class="oneid__field oneid__inline">' +
-      '<input class="field__input" value="jiho@email.com" />' +
+      '<span class="tfield">' +
+      '<input class="tfield__input" type="email" value="jiho@email.com" />' +
+      '<button class="tfield__clear" data-action="clear-field" title="지우기" aria-label="지우기">✕</button>' +
+      "</span>" +
       '<button class="btn btn--outline oneid__send" data-action="send">전송</button>' +
       "</div>" +
-      '<div class="oneid__field oneid__inline' + (state.error ? " is-shake" : "") + '">' +
-      '<input class="field__input' + (state.error ? " is-invalid" : "") + '" placeholder="인증번호 6자리 입력" inputmode="numeric" />' +
+      '<div class="oneid__field oneid__numrow">' +
+      '<div class="numfield' + (state.error ? " numfield--error is-shake" : "") + '" data-numfield>' +
+      numCells() +
+      '<input class="numfield__hidden" inputmode="numeric" autocomplete="one-time-code" maxlength="6" value="' + code + '" aria-label="인증번호 6자리" />' +
+      "</div>" +
       '<span class="oneid__timer">' + fmtTimer(state.timerSec) + "</span>" +
       "</div>" +
       (state.error
-        ? '<p class="oneid__error">인증번호가 올바르지 않습니다. 다시 확인해 주세요.</p>'
+        ? '<p class="tfield__helper">인증번호가 올바르지 않습니다. 다시 확인해 주세요.</p>'
         : "") +
       '<p class="oneid__caption oneid__caption--left">인증번호 전송은 하루 5회까지 가능합니다</p>' +
       '<div class="oneid__notice">✓ 인증한 이메일이<br /><b>Pleos 계정 ID 가 됩니다</b></div>' +
@@ -132,14 +150,15 @@
     return shell(3, state, main, footer);
   }
 
-  /* ---- STEP 4 · 약관 및 동의 ---- */
+  /* ---- STEP 4 · 약관 및 동의 (§4 Checkbox: checked=informative_active) ---- */
   function step4(state) {
     function row(key, tag, label, checked) {
       var warn = state.warn && tag === "필수" && !checked ? " oneid__consent--warn" : "";
       return (
         '<div class="oneid__consent' + warn + '" data-consent="' + key + '">' +
         '<span class="oneid__consent-label">[ ' + tag + " ] " + label + "</span>" +
-        (checked ? '<span class="oneid__check">✓</span>' : '<span class="oneid__radio"></span>') +
+        '<span class="checkbox' + (checked ? " is-checked" : "") + '">' +
+        '<span class="checkbox__box">✓</span></span>' +
         "</div>"
       );
     }

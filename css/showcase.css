@@ -303,13 +303,23 @@
   height: var(--oneid-btn-h);
 }
 
-/* 입력 */
+/* 입력 — Text/Number Field에 One ID 스킨(6px 라운드) 적용 */
 .oneid__field { margin-bottom: var(--sp-3); }
-.oneid .field__input {
+.oneid .field__input,
+.oneid .tfield__input {
   background: var(--surface);
   border-color: var(--oneid-line);
   border-radius: var(--oneid-radius);
 }
+.oneid .tfield__input { padding-right: var(--sp-10); } /* clear 버튼 자리 */
+.oneid .numfield__cell {
+  border-color: var(--oneid-line);
+  border-radius: var(--oneid-radius);
+}
+.oneid .numfield__cell--focused { border-color: var(--basic-900); }
+.oneid .numfield--error .numfield__cell { border-color: var(--danger); }
+.oneid__numrow { display: flex; align-items: center; gap: var(--sp-3); }
+.oneid__numrow .oneid__timer { position: static; }
 .oneid__inline { display: flex; align-items: center; gap: var(--sp-2); position: relative; }
 .oneid__inline .field__input { flex: 1; }
 .oneid__send { flex-shrink: 0; height: 52px; padding: 0 var(--sp-5); }
@@ -400,6 +410,7 @@
 }
 
 /* 화면 안 토스트 — 디바이스 하단 중앙 */
+/* 스펙: 화면 하단 Center, 화면 여백(좌/우/하단) 24 — 토스트 자체 패딩은 컴포넌트 스펙 그대로 */
 .oneid__toast {
   position: absolute;
   left: 50%;
@@ -407,9 +418,8 @@
   transform: translateX(-50%);
   z-index: 6;
   width: max-content;
-  max-width: calc(100% - var(--sp-10));
+  max-width: calc(100% - (var(--sp-6) * 2));
 }
-.oneid__toast .toast { padding: var(--sp-4); }
 
 /* 로딩 오버레이 */
 .oneid__overlay {
