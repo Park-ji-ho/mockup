@@ -3,9 +3,8 @@
    메인 디자인: 실서비스(One ID) 스타일. Pleos Connect 토큰으로 구현(서브).
    SCREENS[step](state) => htmlString. 같은 HTML을 웹/앱 프레임에 동시 주입.
    모든 버튼은 data-action, 토글 행은 data-acc/data-consent로 동작한다(showcase.js가 처리).
-   state = { step, theme, loading, error, region, dir,
-             accounts:{hyundai,kia,genesis}, consents:{terms,privacy,extra},
-             marketing, timerSec, warn }
+   state = { step, theme, loading, error, dir,
+             consents:{terms,privacy}, marketing, timerSec, warn }
    ========================================================= */
 (function () {
   "use strict";
@@ -58,7 +57,7 @@
       '<h2 class="oneid__title">하나의 계정으로,<br />모든 그룹 서비스</h2>' +
       '<div class="oneid__links"><span data-action="info">Pleos 계정 알아보기</span><i>|</i><span data-action="info">Pleos 계정 전환 방법</span></div>' +
       '<div class="oneid__pleos"><em>Pleos</em></div>' +
-      '<div class="oneid__notice oneid__notice--fill">⚠ 2027.1.25 까지 미전환 시<br />기존 계정 로그인 불가</div>' +
+      '<div class="oneid__notice oneid__notice--fill">2027.1.25 까지 미전환 시<br />기존 계정 로그인 불가</div>' +
       '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>' +
       '<div class="oneid__actions">' +
       '<button class="btn btn--filled btn--block" data-action="start">지금 전환하기 ( 약 1분 )</button>' +
@@ -93,41 +92,35 @@
     return shell(2, state, main);
   }
 
-  /* ---- STEP 3 · 계정 확인 · 병합 ---- */
+  /* ---- STEP 3 · 계정 확인 · 병합 (인증 이메일 기준 자동 조회 — 선택 아님) ---- */
   function step3(state) {
-    function acct(key, mark, name, sub) {
-      var on = state.accounts[key];
+    function acct(mark, name, sub) {
       return (
-        '<div class="oneid__acct' + (on ? "" : " oneid__acct--off") + '" data-acc="' + key + '">' +
+        '<div class="oneid__acct oneid__acct--static">' +
         '<span class="oneid__mark">' + mark + "</span>" +
         '<span class="oneid__acct-meta"><span class="oneid__acct-name">' + name + "</span>" +
         '<span class="oneid__acct-sub">' + sub + "</span></span>" +
-        (on ? '<span class="oneid__check">✓</span>' : '<span class="oneid__radio"></span>') +
+        '<span class="oneid__check">✓</span>' +
         "</div>"
       );
     }
-    var count =
-      (state.accounts.hyundai ? 1 : 0) + (state.accounts.kia ? 1 : 0) + (state.accounts.genesis ? 1 : 0);
     var main =
       '<h2 class="oneid__title">박지호님의 계정<br />3 개를 찾았어요</h2>' +
       '<div class="oneid__acct-list">' +
-      acct("hyundai", "H", "마이현대", "차량 1 · 32,000P") +
-      acct("kia", "K", "Kia App", "구독 1건") +
-      acct("genesis", "G", "MY GENESIS", "이용 이력") +
+      acct("H", "마이현대", "차량 1 · 32,000P") +
+      acct("K", "Kia App", "구독 1건") +
+      acct("G", "MY GENESIS", "이용 이력") +
       "</div>" +
       '<p class="oneid__caption">인증 이메일 기준 보유 계정 자동 조회</p>' +
       '<div class="oneid__actions">' +
-      '<button class="btn btn--filled btn--block" data-action="merge"' + (count === 0 ? " disabled" : "") + ">" +
-      (count > 0 ? count + "개 계정 하나로 합치기" : "합칠 계정을 선택하세요") +
-      "</button>" +
+      '<button class="btn btn--filled btn--block" data-action="merge">하나로 합치기</button>' +
       '<button class="btn btn--outline btn--block" data-action="back">이전</button>' +
       "</div>";
     return shell(3, state, main);
   }
 
-  /* ---- STEP 4 · 동의 (국가별) ---- */
+  /* ---- STEP 4 · 동의 (국가별 자동 분기 — 목업은 KR 화면) ---- */
   function step4(state) {
-    var region = state.region || "KR";
     function row(key, tag, label, checked) {
       var warn = state.warn && tag === "필수" && !checked ? " oneid__consent--warn" : "";
       return (
@@ -137,26 +130,15 @@
         "</div>"
       );
     }
-    var extra = "";
-    var noticeText = "EU: GDPR 재동의 · 中: 국외이전<br />단독동의로 자동 분기";
-    if (region === "EU") {
-      extra = row("extra", "필수", "GDPR 데이터 처리 재동의", state.consents.extra);
-      noticeText = "EU 지역: GDPR 재동의 항목이<br />추가로 표시됩니다";
-    } else if (region === "CN") {
-      extra = row("extra", "필수", "개인정보 국외이전 단독동의", state.consents.extra);
-      noticeText = "중국 지역: 국외이전 단독동의가<br />별도 단계로 표시됩니다";
-    }
-    var badge = { KR: "🇰🇷 KR", EU: "🇪🇺 EU", CN: "🇨🇳 CN" }[region];
     var main =
-      '<div class="oneid__region-wrap"><span class="oneid__region">' + badge + "</span></div>" +
+      '<div class="oneid__region-wrap"><span class="oneid__region">KR</span></div>' +
       '<h2 class="oneid__title oneid__title--left">약관 및 동의</h2>' +
       '<div class="oneid__consent-list">' +
       row("terms", "필수", "통합 계정 약관", state.consents.terms) +
       row("privacy", "필수", "개인정보 수집 · 이용", state.consents.privacy) +
-      extra +
       row("marketing", "선택", "마케팅 수신", state.marketing) +
       "</div>" +
-      '<div class="oneid__notice">' + noticeText + "</div>" +
+      '<div class="oneid__notice">EU: GDPR 재동의 · 中: 국외이전<br />단독동의로 자동 분기</div>' +
       '<div class="oneid__actions">' +
       '<button class="btn btn--filled btn--block" data-action="agree">동의하고 계속</button>' +
       '<button class="btn btn--outline btn--block" data-action="back">이전</button>' +

@@ -10,14 +10,12 @@
   var TIMER_MAX = 598; // 9:58
 
   var scenario = {
-    step: 1, // 1 안내 · 2 이메일 인증 · 3 계정 확인·병합 · 4 동의(국가별) · 5 완료
+    step: 1, // 1 안내 · 2 이메일 인증 · 3 계정 확인·병합 · 4 동의 · 5 완료
     theme: "light",
     loading: false,
     error: false,
-    region: "KR",
     dir: "", // 단계 전환 애니메이션 방향 (fwd/back), 렌더 후 소거
-    accounts: { hyundai: true, kia: true, genesis: true },
-    consents: { terms: true, privacy: true, extra: true },
+    consents: { terms: true, privacy: true },
     marketing: false,
     warn: false, // 필수 동의 미체크 강조
     timerSec: TIMER_MAX,
@@ -76,20 +74,6 @@
         { t: "에러", act: function (s) { s.error = !s.error; if (s.error) toast("인증에 실패했습니다.", "danger"); }, on: function (s) { return s.error; } },
         { t: "토스트", act: function () { toast("인증번호를 발송했습니다."); }, on: function () { return false; } },
       ],
-    },
-    {
-      label: "국가",
-      items: ["KR", "EU", "CN"].map(function (r) {
-        return {
-          t: r === "CN" ? "中" : r,
-          act: function (s) {
-            s.region = r;
-            s.consents.extra = true; // 지역 전환 시 추가 동의 초기화
-            s.warn = false;
-          },
-          on: function (s) { return s.region === r; },
-        };
-      }),
     },
     {
       label: "테마",
@@ -162,8 +146,7 @@
     },
     merge: function () { withLoading(800, function () { setStep(4); }); },
     agree: function () {
-      var needExtra = scenario.region !== "KR";
-      var ok = scenario.consents.terms && scenario.consents.privacy && (!needExtra || scenario.consents.extra);
+      var ok = scenario.consents.terms && scenario.consents.privacy;
       if (!ok) {
         scenario.warn = true;
         toast("필수 항목에 동의해 주세요.", "danger");
@@ -173,7 +156,7 @@
       withLoading(600, function () { setStep(5); });
     },
     share: function () { toast("카카오톡 공유 화면을 여는 목업입니다."); },
-    finish: function () { toast("통합 계정으로 서비스를 시작합니다! 🎉"); },
+    finish: function () { toast("통합 계정으로 서비스를 시작합니다!"); },
   };
 
   function wireFrames() {
@@ -185,19 +168,12 @@
           if (fn && !actEl.disabled) fn();
           return;
         }
-        var acc = e.target.closest("[data-acc]");
-        if (acc) {
-          var k = acc.dataset.acc;
-          scenario.accounts[k] = !scenario.accounts[k];
-          render();
-          return;
-        }
         var con = e.target.closest("[data-consent]");
         if (con) {
           var key = con.dataset.consent;
           if (key === "marketing") scenario.marketing = !scenario.marketing;
           else scenario.consents[key] = !scenario.consents[key];
-          if (scenario.consents.terms && scenario.consents.privacy && (scenario.region === "KR" || scenario.consents.extra)) {
+          if (scenario.consents.terms && scenario.consents.privacy) {
             scenario.warn = false; // 필수가 모두 채워지면 경고 해제
           }
           render();

@@ -374,16 +374,12 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 토글 가능한 행 */
-.oneid__acct,
+/* 토글 가능한 행 — 동의 항목만 (계정 목록은 자동 조회라 정적) */
 .oneid__consent {
   cursor: pointer;
-  transition: border-color 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
-.oneid__acct:hover,
 .oneid__consent:hover { background: var(--surface-low); }
-.oneid__acct--off { opacity: 0.55; }
-.oneid__acct--off .oneid__mark { background: var(--surface-accent); color: var(--text-tertiary); }
 
 /* 에러: 흔들림 + 필드 강조 */
 .is-shake { animation: oneid-shake 0.4s ease; }

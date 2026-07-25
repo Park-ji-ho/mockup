@@ -11,7 +11,7 @@
   function setTheme(t) {
     root.setAttribute("data-theme", t);
     document.querySelectorAll("[data-theme-toggle]").forEach(function (b) {
-      b.textContent = t === "dark" ? "☀︎ 라이트" : "☾ 다크";
+      b.textContent = t === "dark" ? "라이트 모드" : "다크 모드";
     });
   }
   function initTheme() {
