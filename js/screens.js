@@ -16,16 +16,16 @@
     );
   }
 
+  /* 단계 표시 — DESIGN §4 Indicator (Wide) 컴포넌트 사용
+     Root(.indicator) / Present Value(--active, 불투명) / Next·Prev(32%) */
   function dots(step) {
     var out = "";
     for (var i = 1; i <= 5; i++) {
-      if (i === step) out += '<span class="oneid__dot oneid__dot--now" data-goto="' + i + '">' + i + "</span>";
-      else
-        out +=
-          '<span class="oneid__dot' + (i < step ? " oneid__dot--done" : "") +
-          '" data-goto="' + i + '" title="' + i + '단계로 이동"></span>';
+      out +=
+        '<span class="indicator__dot' + (i === step ? " indicator__dot--active" : "") +
+        '" data-goto="' + i + '" title="' + i + '단계로 이동"></span>';
     }
-    return '<div class="oneid__dots">' + out + "</div>";
+    return '<div class="oneid__dots"><span class="indicator indicator--wide">' + out + "</span></div>";
   }
 
   function overlay(state) {

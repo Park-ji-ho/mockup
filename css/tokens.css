@@ -66,8 +66,6 @@
   --oneid-btn-fg: var(--basic-00);
   --oneid-btn-h: 52px;
   --oneid-line: var(--basic-200);      /* 카드/입력 테두리 */
-  --oneid-dot: 8px;                    /* 단계 도트 */
-  --oneid-dot-now: 24px;               /* 현재 단계(숫자 서클) */
 
   /* ---- Back-compat aliases (기존 셸 컴포넌트용 → DESIGN 토큰 매핑) ---- */
   --color-bg: var(--bg-primary);

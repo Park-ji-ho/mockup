@@ -202,28 +202,16 @@
   }
 }
 
-/* 도트 인디케이터 */
+/* 단계 표시 — DESIGN §4 Indicator(Wide) 재사용. 클릭 내비게이션만 덧붙인다 */
 .oneid__dots {
   display: flex; align-items: center; justify-content: center;
-  gap: 10px;
   padding: var(--sp-5) 0 var(--sp-2);
 }
-.oneid__dot {
-  width: var(--oneid-dot); height: var(--oneid-dot);
-  border-radius: var(--r-full);
-  background: var(--surface-accent);
+.oneid__dots .indicator__dot {
   cursor: pointer;
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition: opacity var(--dur-standard) var(--ease-standard), transform 0.12s ease;
 }
-.oneid__dot:hover { transform: scale(1.3); background: var(--basic-400); }
-.oneid__dot--done:hover { background: var(--basic-700); }
-.oneid__dot--done { background: var(--basic-900); }
-.oneid__dot--now {
-  width: var(--oneid-dot-now); height: var(--oneid-dot-now);
-  display: inline-flex; align-items: center; justify-content: center;
-  background: var(--basic-900); color: var(--basic-00);
-  font-size: 12px; font-weight: 700;
-}
+.oneid__dots .indicator__dot:hover { transform: scale(1.3); }
 
 /* 콘텐츠 컬럼 — 앱: 좌우 20px / 웹: 늘려서 중앙 */
 .oneid__content { padding: var(--sp-2) var(--sp-5) var(--sp-8); }
@@ -447,8 +435,6 @@
 }
 @keyframes oneid-fade { from { opacity: 0; } to { opacity: 1; } }
 
-/* 현재 도트 팝 */
-.oneid__dot--now { animation: oneid-pop 0.28s var(--ease-standard); }
 @keyframes oneid-pop {
   from { transform: scale(0.55); }
   to { transform: scale(1); }
@@ -500,7 +486,7 @@
 /* 접근성: 모션 최소화 선호 시 애니메이션 제거 */
 @media (prefers-reduced-motion: reduce) {
   .oneid__content.anim-fwd, .oneid__content.anim-back,
-  .oneid__dot--now, .oneid__check, .oneid__done-circle,
+  .oneid__check, .oneid__done-circle,
   .oneid__bubble, .is-shake, .oneid__consent--warn, .oneid__overlay {
     animation: none;
   }

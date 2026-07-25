@@ -315,12 +315,11 @@
 | `--oneid-btn-bg` / `--oneid-btn-fg` | basic_900 / basic_00 | 블랙 필 버튼 (다크 테마 시 자동 반전) |
 | `--oneid-btn-h` | 52px | 버튼·입력 높이 |
 | `--oneid-line` | basic_200 | 카드·입력·아웃라인 버튼 테두리 |
-| `--oneid-dot` / `--oneid-dot-now` | 8px / 24px | 단계 도트 / 현재 단계 숫자 서클 |
 
 스타일 규칙:
 - 화이트 배경(`--surface`), 상단 **중앙 브랜드 헤더**(대문자 타이틀 + 서브 라벨).
-- 단계 표시는 **숫자 도트 인디케이터** — 현재 = 숫자 블랙 서클(24px), 지난 단계 = 블랙 도트, 남은
-  단계 = 회색 도트(8px).
+- 단계 표시는 **§4 Indicator(Wide) 컴포넌트**를 그대로 사용 — Root/Present/Next·Prev 구조,
+  dot 8px, Present=`--text-primary` 불투명, 나머지 32%, pitch 24. (도트 클릭 시 해당 단계 이동)
 - 타이틀/설명은 중앙 정렬, 보조 설명은 `--text-tertiary`.
 - **색 사용 원칙(중요)**: 강조·선택·버튼·인디케이터는 전부 **무채색(basic 스케일)**. Informative
   색(`--info`/`--success`/`--danger`)은 오류·성공 등 **상태 피드백에만** 쓴다. 일반 UI에 파랑 금지.
