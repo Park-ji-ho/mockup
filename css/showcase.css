@@ -370,16 +370,15 @@
   color: var(--basic-900);
   font-size: 40px;
 }
-/* 말풍선 — 버튼 위에서 둥둥 떠 있는 경고 */
+/* 말풍선 — 버튼 위에서 둥둥, 지인 추천 넛지 (그레이 필) */
 .oneid__bubble {
   position: relative;
   margin: 0 0 var(--sp-2);
   padding: var(--sp-3) var(--sp-4);
-  border: 1px solid var(--basic-900);
   border-radius: var(--r-md);
-  background: var(--surface);
-  color: var(--text-primary);
-  font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
+  background: var(--surface-high);
+  color: var(--text-secondary);
+  font-size: var(--fs-label-s); font-weight: var(--fw-semibold);
   text-align: center;
   line-height: 1.55;
   animation: oneid-float 2.4s ease-in-out infinite;
@@ -389,12 +388,10 @@
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -7px;
+  bottom: -5px;
   width: 12px; height: 12px;
   transform: translateX(-50%) rotate(45deg);
-  background: var(--surface);
-  border-right: 1px solid var(--basic-900);
-  border-bottom: 1px solid var(--basic-900);
+  background: var(--surface-high);
 }
 @keyframes oneid-float {
   0%, 100% { transform: translateY(0); }

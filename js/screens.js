@@ -182,7 +182,7 @@
       '<h2 class="oneid__title">전환 완료 !</h2>' +
       '<p class="oneid__desc">자산 3 종 승계 완료<br />모든 서비스 바로 이용</p>';
     var footer =
-      '<div class="oneid__bubble">2027.1.25 까지 전환하지 않으면<br />기존 계정을 쓸 수 없어요 !</div>' +
+      '<div class="oneid__bubble">아직 전환 안 한 가족 · 친구가 있나요?<br />2027.1.25 전에 함께 전환해 보세요</div>' +
       '<button class="btn btn--outline btn--block" data-action="share">공유하기</button>' +
       '<button class="btn btn--filled btn--block" data-action="finish">시작하기</button>';
     return shell(5, state, main, footer);
