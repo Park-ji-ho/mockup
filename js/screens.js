@@ -77,7 +77,7 @@
       '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>';
     var footer =
       '<button class="btn btn--filled btn--block" data-action="start">지금 전환하기 (약 1분)</button>' +
-      '<button class="btn btn--outline btn--block" data-action="later">다음에 하기 (계속 이용)</button>';
+      '<button class="btn btn--outline btn--block" data-action="later">다음에 하기</button>';
     return shell(1, state, main, footer);
   }
 

@@ -143,7 +143,10 @@
   background: var(--surface-high); border-bottom: 1px solid var(--border);
 }
 .frame--web .frame__dot { width: 10px; height: 10px; border-radius: var(--r-full); background: var(--surface-accent); }
-.frame--web .frame__viewport { width: 760px; height: 640px; }
+.frame--web .frame__viewport {
+  width: clamp(760px, calc(100vw - 420px), 1160px);
+  height: clamp(560px, calc(100vh - 230px), 780px);
+}
 
 /* ---------------------------------------------------------
    One ID 흐름 — 실서비스 스타일 스킨 (토큰 매핑)
