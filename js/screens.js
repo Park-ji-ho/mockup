@@ -73,11 +73,11 @@
       '<h2 class="oneid__title">하나의 계정으로,<br />모든 그룹 서비스</h2>' +
       '<div class="oneid__links"><span data-action="info">Pleos 계정 알아보기</span><i>|</i><span data-action="info">Pleos 계정 전환 방법</span></div>' +
       '<div class="oneid__pleos"><em>Pleos</em></div>' +
-      '<div class="oneid__notice oneid__notice--fill">2027.1.25 까지 미전환 시<br />기존 계정 로그인 불가</div>' +
+      '<div class="oneid__notice oneid__notice--fill">2027.1.25까지 미전환 시<br />기존 계정 로그인 불가</div>' +
       '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>';
     var footer =
-      '<button class="btn btn--filled btn--block" data-action="start">지금 전환하기 ( 약 1분 )</button>' +
-      '<button class="btn btn--outline btn--block" data-action="later">다음에 하기 — 계속 이용</button>';
+      '<button class="btn btn--filled btn--block" data-action="start">지금 전환하기 (약 1분)</button>' +
+      '<button class="btn btn--outline btn--block" data-action="later">다음에 하기 (계속 이용)</button>';
     return shell(1, state, main, footer);
   }
 
@@ -116,7 +116,7 @@
         ? '<p class="tfield__helper">인증번호가 올바르지 않습니다. 다시 확인해 주세요.</p>'
         : "") +
       '<p class="oneid__caption oneid__caption--left">인증번호 전송은 하루 5회까지 가능합니다</p>' +
-      '<div class="oneid__notice">✓ 인증한 이메일이<br /><b>Pleos 계정 ID 가 됩니다</b></div>' +
+      '<div class="oneid__notice">✓ 인증한 이메일이<br /><b>Pleos 계정 ID가 됩니다</b></div>' +
       '<p class="oneid__caption" data-action="info">개인정보 처리 안내 보기 →</p>';
     var footer =
       '<button class="btn btn--filled btn--block" data-action="verify">확인</button>' +
@@ -137,9 +137,9 @@
       );
     }
     var main =
-      '<h2 class="oneid__title">박지호님의 계정<br />3 개를 찾았어요</h2>' +
+      '<h2 class="oneid__title">박지호님의 계정<br />3개를 찾았어요</h2>' +
       '<div class="oneid__acct-list">' +
-      acct("H", "마이현대", "차량 1 · 32,000P") +
+      acct("H", "마이현대", "차량 1, 32,000P") +
       acct("K", "Kia App", "구독 1건") +
       acct("G", "MY GENESIS", "이용 이력") +
       "</div>" +
@@ -156,7 +156,7 @@
       var warn = state.warn && tag === "필수" && !checked ? " oneid__consent--warn" : "";
       return (
         '<div class="oneid__consent' + warn + '" data-consent="' + key + '">' +
-        '<span class="oneid__consent-label">[ ' + tag + " ] " + label + "</span>" +
+        '<span class="oneid__consent-label">[' + tag + "] " + label + "</span>" +
         '<span class="checkbox' + (checked ? " is-checked" : "") + '">' +
         '<span class="checkbox__box">✓</span></span>' +
         "</div>"
@@ -166,7 +166,7 @@
       '<h2 class="oneid__title oneid__title--left">약관 및 동의</h2>' +
       '<div class="oneid__consent-list">' +
       row("terms", "필수", "통합 계정 약관", state.consents.terms) +
-      row("privacy", "필수", "개인정보 수집 · 이용", state.consents.privacy) +
+      row("privacy", "필수", "개인정보 수집 및 이용", state.consents.privacy) +
       row("marketing", "선택", "마케팅 수신", state.marketing) +
       "</div>";
     var footer =
@@ -179,10 +179,10 @@
   function step5(state) {
     var main =
       '<div class="oneid__done-circle">✓</div>' +
-      '<h2 class="oneid__title">전환 완료 !</h2>' +
-      '<p class="oneid__desc">자산 3 종 승계 완료<br />모든 서비스 바로 이용</p>';
+      '<h2 class="oneid__title">전환 완료!</h2>' +
+      '<p class="oneid__desc">자산 3종 승계 완료<br />모든 서비스 바로 이용</p>';
     var footer =
-      '<div class="oneid__bubble">아직 전환 안 한 가족 · 친구가 있나요?<br />2027.1.25 전에 함께 전환해 보세요</div>' +
+      '<div class="oneid__bubble">아직 전환 안 한 가족이나 친구가 있나요?<br />2027.1.25 전에 함께 전환해 보세요</div>' +
       '<button class="btn btn--outline btn--block" data-action="share">공유하기</button>' +
       '<button class="btn btn--filled btn--block" data-action="finish">시작하기</button>';
     return shell(5, state, main, footer);
