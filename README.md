@@ -43,6 +43,31 @@ python3 -m http.server 8000
 
 `main`에 push하면 자동으로 반영된다.
 
+## Figma로 가져오기 (Export)
+
+이 목업은 공개 URL(GitHub Pages)로 배포되므로, 별도 개발 없이 기존 플러그인으로
+Figma에 편집 가능한 레이어로 임포트할 수 있다.
+
+> 참고: Figma는 REST API로 외부에서 레이어를 *생성*할 수 없다. 노드 생성은 Figma
+> 내부에서 실행되는 플러그인만 가능하므로, 아래처럼 임포트 플러그인을 사용한다.
+
+1. Figma에서 **Menu → Plugins → Browse plugins**로 이동
+2. **html.to.design** (또는 유사 HTML 임포트 플러그인)을 설치
+3. 플러그인 실행 후 배포 URL 입력:
+   `https://Park-ji-ho.github.io/mockup/`
+4. Import를 실행하면 페이지가 프레임/레이어로 변환되어 Figma 캔버스에 들어온다.
+
+로컬 작업본을 그대로 가져오려면 `python3 -m http.server`로 띄운 뒤
+`http://localhost:8000` 을 플러그인에 입력하면 된다. (플러그인이 localhost 접근을
+지원하는 경우)
+
+### Figma 임포트가 잘 되도록 하는 작성 규칙
+
+- 시맨틱 태그와 명확한 클래스명을 사용한다. (레이어명이 이 값으로 매핑됨)
+- 레이아웃은 Flexbox/Grid로 구성한다. (Auto Layout으로 잘 변환됨)
+- 이미지·아이콘은 가능하면 SVG로 둔다. (벡터로 임포트되어 재편집 용이)
+- 색·간격·타이포는 CSS 변수(`:root`)로 관리한다. (디자인 토큰 대응이 쉬워짐)
+
 ## 커밋 규칙
 
 - 커밋 메시지는 명령형 현재 시제로 간결하게 작성한다. (예: `Add hero section`, `Fix nav layout`)
