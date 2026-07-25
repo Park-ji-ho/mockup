@@ -15,6 +15,9 @@
   CSS 변수)만 사용한다. 필요한 토큰이 없으면 먼저 DESIGN.md에 정의를 추가한 뒤 사용한다.
 - 이 디자인 시스템은 **Pleos Connect UI Design Guide**(자동차 IVI 시스템)를 웹/모바일 목업에
   맞게 적응(adapt)한 것이다. 출처·적응 원칙은 DESIGN.md 상단을 참고한다.
+- 목업은 **Scenario Showcase 패턴**(DESIGN.md §5)으로 구성한다: 좌측 시나리오 리모컨 + 웹/앱
+  프레임 동시 프리뷰. 프리뷰 레이아웃은 뷰포트 `@media`가 아니라 프레임의 `@container`로 분기하고,
+  화면 마크업은 `SCREENS[step](state)` 단일 함수로 정의해 두 프레임에 같은 HTML을 주입한다.
 
 ## 핵심 원칙
 

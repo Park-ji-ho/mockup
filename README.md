@@ -12,15 +12,25 @@
 
 ```
 mockup/
-├── index.html        # 진입점
-├── css/              # 스타일시트
-├── js/               # 스크립트
-├── assets/           # 이미지, 폰트 등 정적 리소스
+├── index.html            # 카테고리 목록(진입점)
+├── category.html         # 카테고리 → UX 목업 진입
+├── showcase.html         # 시나리오 리모컨 + 웹/앱 동시 프리뷰
+├── components.html       # 컴포넌트 갤러리(DESIGN §4)
+├── account-transfer.html # (레거시) 단일 페이지 흐름 참조
+├── css/
+│   ├── tokens.css        # 디자인 토큰 레이어(최초 로드)
+│   ├── style.css         # 베이스 리셋 + 앱 셸
+│   ├── components.css     # 컴포넌트 라이브러리
+│   └── showcase.css      # 쇼케이스 셸 + 흐름 @container
+├── js/                   # screens/showcase/components/main
 ├── README.md
-├── DESIGN.md         # 디자인 시스템 (SSOT) — 모든 UI가 따름
+├── DESIGN.md             # 디자인 시스템 (SSOT) — 모든 UI가 따름
 ├── CLAUDE.md
 └── AGENTS.md
 ```
+
+내비게이션: `index`(카테고리) → `category`(진입) → `showcase`(웹/앱 동시 UX 목업).
+CSS 로드 순서: `tokens.css → style.css → components.css → [page].css`.
 
 ## 디자인 시스템
 

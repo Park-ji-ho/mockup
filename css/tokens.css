@@ -1,0 +1,93 @@
+/* =========================================================
+   tokens.css — 디자인 토큰 레이어 (DESIGN.md §3 SSOT)
+   모든 페이지가 가장 먼저 로드한다. 값 정의는 DESIGN.md 참고.
+   컴포넌트/페이지 CSS는 이 변수만 참조하며, 여기 외에서 토큰을 재정의하지 않는다.
+   ========================================================= */
+:root {
+  /* ---- Basic scale (Light) ---- */
+  --basic-00: #ffffff; --basic-50: #f7f8fa; --basic-100: #edeef2;
+  --basic-200: #e0e1e6; --basic-300: #c7c9ce; --basic-400: #a4a8ae;
+  --basic-500: #686a72; --basic-600: #44464e; --basic-700: #313236;
+  --basic-800: #1d1e21; --basic-900: #131417;
+
+  /* ---- Semantic (Light) ---- */
+  --bg-primary: var(--basic-50);
+  --surface: var(--basic-00);
+  --surface-low: var(--basic-50);
+  --surface-high: var(--basic-100);
+  --surface-accent: var(--basic-200);
+  --border: var(--basic-200);
+  --text-primary: var(--basic-900);
+  --text-secondary: rgba(19, 20, 23, 0.84);
+  --text-tertiary: rgba(19, 20, 23, 0.64);
+  --text-quaternary: rgba(19, 20, 23, 0.32);
+
+  /* ---- Informative accents ---- */
+  --success: #02c265; --info: #0064ff; --danger: #fe3d16; --accent: #5a46fa;
+  --primary: var(--info);
+  --primary-press: #1f56e0;
+  --primary-weak: #eaf0ff;
+
+  /* ---- Typography (web-scaled) ---- */
+  --font-sans: "Asta Sans", -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  --fs-headline-l: 32px; --fs-title-l: 22px; --fs-title-m: 20px; --fs-title-s: 18px;
+  --fs-body-l: 16px; --fs-body-m: 15px; --fs-body-s: 14px;
+  --fs-label-m: 13px; --fs-label-s: 12px;
+  --fw-bold: 800; --fw-semibold: 700; --fw-regular: 400;
+
+  /* ---- Spacing ---- */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+
+  /* ---- Radius ---- */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px; --r-full: 999px;
+
+  /* ---- Elevation ---- */
+  --shadow-1: 0 6px 24px rgba(0, 0, 0, 0.08);
+  --shadow-2: 0 8px 32px rgba(0, 0, 0, 0.16), 0 2px 2px rgba(0, 0, 0, 0.08);
+  --shadow-3: 0 20px 40px rgba(0, 0, 0, 0.24), 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-standard: 300ms;
+
+  /* ---- Icon ---- */
+  --icon-stroke: 1.5px;
+
+  /* ---- Layout ---- */
+  --app-max: 480px;
+
+  /* ---- Back-compat aliases (기존 셸 컴포넌트용 → DESIGN 토큰 매핑) ---- */
+  --color-bg: var(--bg-primary);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-low);
+  --color-border: var(--border);
+  --color-text: var(--text-primary);
+  --color-text-sub: var(--text-tertiary);
+  --color-text-weak: var(--text-quaternary);
+  --color-primary: var(--primary);
+  --color-primary-press: var(--primary-press);
+  --color-primary-weak: var(--primary-weak);
+  --color-success: var(--success);
+  --shadow-sm: var(--shadow-1);
+  --shadow-md: var(--shadow-2);
+  --shadow-lg: var(--shadow-3);
+}
+
+/* Dark theme — data-theme="dark" */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --basic-00: #131417; --basic-50: #1d1e21; --basic-100: #313236;
+  --basic-200: #44464e; --basic-300: #686a72; --basic-400: #a4a8ae;
+  --basic-500: #c7c9ce; --basic-600: #e0e1e6; --basic-700: #edeef2;
+  --basic-800: #f7f8fa; --basic-900: #ffffff;
+  --text-primary: var(--basic-900);
+  --text-secondary: rgba(255, 255, 255, 0.84);
+  --text-tertiary: rgba(255, 255, 255, 0.64);
+  --text-quaternary: rgba(255, 255, 255, 0.32);
+  --success: #00e074; --info: #0082ff; --danger: #ff4c28; --accent: #6a57ff;
+  --surface: var(--basic-50);
+  --surface-low: var(--basic-00);
+  --primary-weak: rgba(0, 130, 255, 0.16);
+}

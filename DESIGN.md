@@ -280,6 +280,31 @@
 
 ---
 
+## 5. Scenario Showcase (목업 프레젠테이션 패턴)
+
+목업을 **시나리오별로, 웹/앱을 한 화면에서 동시에** 보여주기 위한 표준 프레젠테이션 셸.
+개별 기획 흐름(예: 계정 통합)을 이 셸 위에 얹는다.
+
+### 구성
+- **시나리오 리모컨(`.remote`)** — 좌측. 3열 버튼 그리드 + 그룹 라벨(단계/상태/…), 선택 시 `.active`
+  강조. 버튼 클릭 → 단일 상태 객체 갱신 → 프리뷰 **라이브 렌더**.
+- **프리뷰 스테이지(`.stage`)** — 우측. **Web 프레임 + App 프레임**을 나란히 배치, 같은 화면을
+  동시에 렌더.
+- **테마 토글** — 전역 `data-theme`(light/dark). 초기값은 `prefers-color-scheme`, 이후 수동 우선.
+
+### 웹/앱 동시 렌더 규격
+- 각 프레임은 `container-type: inline-size` + 고정 폭(App 375px / Web ≥720px).
+- 흐름 컴포넌트는 뷰포트 `@media`가 아니라 **`@container`로 레이아웃 분기**(App 1열 / Web 2열).
+  → 한 문서 안에서 프레임 폭에 따라 서로 다른 레이아웃이 렌더된다.
+- 상태는 단일 객체 하나. 화면 마크업은 순수 함수 `SCREENS[step](state) => html`로 **한 번만** 정의하고,
+  같은 HTML을 두 프레임에 주입 → 웹/앱 드리프트 불가.
+- ⚠️ 흐름 마크업은 앱 셸의 뷰포트 `@media` 규칙(`.app { @media … }`)에 의존하지 말 것(프레임 오염).
+
+### 파일 규약
+- `showcase.html` — 셸(리모컨 + 두 프레임). `css/showcase.css` — 셸/프레임/흐름 `@container` 레이아웃.
+- `js/screens.js` — 흐름 마크업 SSOT. `js/showcase.js` — 상태·렌더·리모컨. `js/components.js` — 위임 인터랙션.
+- 컴포넌트 갤러리는 `components.html`(전 컴포넌트 상태/변형 + 라이트·다크).
+
 ## 부록 A. 차량 전용 색상 (참조용, 웹 미사용)
 
 - **Climate**: button_enabled=basic_200/50, button_selected=basic_00/200, toggle/slider/airvent 계열.
