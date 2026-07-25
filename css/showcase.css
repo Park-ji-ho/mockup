@@ -289,9 +289,11 @@
   text-align: center;
   line-height: 1.55;
 }
+/* 강조 안내 — 버튼(블랙 필)과 혼동되지 않도록 회색 틴트 + 볼드 텍스트 */
 .oneid__notice--fill {
-  background: var(--basic-900);
-  color: var(--basic-00);
+  background: var(--surface-high);
+  border: 1px solid var(--basic-300);
+  color: var(--text-primary);
   font-weight: var(--fw-semibold);
 }
 
