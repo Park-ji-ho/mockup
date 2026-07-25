@@ -82,6 +82,10 @@
   overflow: auto;
 }
 .frame { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+/* 환경 토글 — 캔버스에는 선택한 환경만 표시 */
+.stage[data-env="web"] .frame--app { display: none; }
+.stage[data-env="app"] .frame--web { display: none; }
 .frame__label {
   font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
   color: var(--text-tertiary); text-transform: uppercase; text-align: center;
@@ -326,6 +330,18 @@
   text-align: center;
   line-height: 1.55;
 }
+
+/* 화면 안 토스트 — 디바이스 하단 중앙 */
+.oneid__toast {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-6);
+  transform: translateX(-50%);
+  z-index: 6;
+  width: max-content;
+  max-width: calc(100% - var(--sp-10));
+}
+.oneid__toast .toast { padding: var(--sp-4); }
 
 /* 로딩 오버레이 */
 .oneid__overlay {

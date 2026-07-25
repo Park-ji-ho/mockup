@@ -12,9 +12,11 @@
   var scenario = {
     step: 1, // 1 안내 · 2 이메일 인증 · 3 계정 확인·병합 · 4 동의 · 5 완료
     theme: "light",
+    env: "web", // 캔버스에 표시할 환경: web | app
     loading: false,
     error: false,
     dir: "", // 단계 전환 애니메이션 방향 (fwd/back), 렌더 후 소거
+    toast: null, // {msg, variant} — 디바이스 화면 안에서 표시
     consents: { terms: true, privacy: true },
     marketing: false,
     warn: false, // 필수 동의 미체크 강조
@@ -24,9 +26,18 @@
   var appFrame = document.getElementById("frame-app");
   var webFrame = document.getElementById("frame-web");
   var remoteEl = document.getElementById("remote");
+  var stageEl = document.querySelector(".stage");
 
+  /* 화면 안 토스트 — 상태로 렌더하고 일정 시간 후 소거 */
+  var toastTimer = null;
   function toast(msg, variant) {
-    if (window.UI) window.UI.showToast(msg, variant);
+    scenario.toast = { msg: msg, variant: variant || "" };
+    clearTimeout(toastTimer);
+    render();
+    toastTimer = setTimeout(function () {
+      scenario.toast = null;
+      render();
+    }, 2400);
   }
 
   /* ---- 상태 전이 헬퍼 ---- */
@@ -82,6 +93,13 @@
         { t: "다크", act: function (s) { s.theme = "dark"; }, on: function (s) { return s.theme === "dark"; } },
       ],
     },
+    {
+      label: "환경",
+      items: [
+        { t: "Web", act: function (s) { s.env = "web"; }, on: function (s) { return s.env === "web"; } },
+        { t: "App", act: function (s) { s.env = "app"; }, on: function (s) { return s.env === "app"; } },
+      ],
+    },
   ];
 
   var buttonRefs = [];
@@ -119,6 +137,7 @@
     var html = window.SCREENS[scenario.step](scenario);
     appFrame.innerHTML = html;
     webFrame.innerHTML = html;
+    stageEl.setAttribute("data-env", scenario.env); // 캔버스에는 선택한 환경만 표시
     document.documentElement.setAttribute("data-theme", scenario.theme);
     refreshRemote();
     scenario.dir = ""; // 전환 애니메이션은 1회만

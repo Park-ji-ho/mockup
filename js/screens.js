@@ -3,7 +3,7 @@
    메인 디자인: 실서비스(One ID) 스타일. Pleos Connect 토큰으로 구현(서브).
    SCREENS[step](state) => htmlString. 같은 HTML을 웹/앱 프레임에 동시 주입.
    모든 버튼은 data-action, 토글 행은 data-acc/data-consent로 동작한다(showcase.js가 처리).
-   state = { step, theme, loading, error, dir,
+   state = { step, theme, loading, error, dir, toast:{msg,variant}|null,
              consents:{terms,privacy}, marketing, timerSec, warn }
    ========================================================= */
 (function () {
@@ -31,6 +31,16 @@
       : "";
   }
 
+  /* 토스트 — 디바이스 화면 안에서 표시 */
+  function toastLayer(state) {
+    if (!state.toast) return "";
+    return (
+      '<div class="oneid__toast"><div class="toast' +
+      (state.toast.variant === "danger" ? " toast--danger" : "") +
+      '"><span class="toast__text">' + state.toast.msg + "</span></div></div>"
+    );
+  }
+
   function shell(step, state, main) {
     var anim = state.dir === "fwd" ? " anim-fwd" : state.dir === "back" ? " anim-back" : "";
     return (
@@ -40,6 +50,7 @@
       dots(step) +
       '<div class="oneid__content' + anim + '">' + main + "</div>" +
       "</div>" +
+      toastLayer(state) +
       overlay(state) +
       "</div>"
     );

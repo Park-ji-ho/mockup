@@ -18,8 +18,9 @@
 - DESIGN.md는 **Pleos Connect UI Design Guide**(자동차 IVI)를 웹/모바일에 맞게 적응한 것이다.
 - 필요한 토큰이 없으면 DESIGN.md에 먼저 정의를 추가한 뒤 사용한다.
 - 목업은 **Scenario Showcase 패턴**(DESIGN.md §5)으로 구성한다: 좌측 시나리오 리모컨 + 웹/앱
-  프레임 동시 프리뷰. 프리뷰는 프레임 `@container`로 레이아웃을 분기하고(뷰포트 `@media` 아님),
-  화면은 `SCREENS[step](state)` 단일 함수로 정의해 두 프레임에 같은 HTML을 주입한다.
+  프레임 프리뷰(환경 토글로 캔버스에 하나만 표시, 상태는 동기). 프리뷰는 프레임 `@container`로
+  레이아웃을 분기하고(뷰포트 `@media` 아님), 화면은 `SCREENS[step](state)` 단일 함수로 정의해
+  두 프레임에 같은 HTML을 주입한다. 토스트·에러·로딩은 디바이스 화면 안에서 렌더한다.
 
 ## 규칙
 
