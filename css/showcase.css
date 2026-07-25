@@ -99,8 +99,7 @@
 .frame__viewport {
   container-type: inline-size;
   background: var(--surface);
-  overflow: auto;
-  scrollbar-width: thin;
+  overflow: hidden; /* 스크롤은 내부(.oneid__scroll)가 담당 — 전환 시 스크롤바 번쩍임 방지 */
 }
 
 /* App device (mobile) */
@@ -145,7 +144,15 @@
 .oneid__brand span { font-size: var(--fs-body-s); color: var(--text-tertiary); }
 .oneid__brand em { font-style: normal; font-weight: var(--fw-semibold); color: var(--text-secondary); }
 
-.oneid__scroll { flex: 1; overflow: auto; }
+/* 세로 스크롤만 허용, 스크롤바는 숨김(모바일 관행) — 전환 애니메이션의
+   translateX가 가로 오버플로를 만들어도 스크롤바가 나타나지 않게 한다 */
+.oneid__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.oneid__scroll::-webkit-scrollbar { display: none; }
 
 /* 도트 인디케이터 */
 .oneid__dots {
