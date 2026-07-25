@@ -99,6 +99,20 @@
   padding: var(--sp-6);
 }
 
+/* ---- 캡처 모드 (?capture=1) — 화면만 좌상단에 원본 크기로 (스크린샷 내보내기용) ---- */
+.showcase--capture { display: block; height: auto; }
+.showcase--capture .showcase__bar,
+.showcase--capture .remote,
+.showcase--capture .frame__label { display: none; }
+.showcase--capture .stage { display: block; padding: 0; overflow: visible; }
+.showcase--capture .frame { display: block; }
+.showcase--capture .frame__device {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.showcase--capture .frame__chrome { display: none; }
+
 /* ---- Stage (web + app frames) ---- */
 .stage {
   grid-row: 2;

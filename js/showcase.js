@@ -273,6 +273,10 @@
   if (params.get("preview") === "1") {
     document.querySelector(".showcase").classList.add("showcase--preview");
   }
+  if (params.get("capture") === "1") {
+    // 스크린샷 내보내기용: 선택된 프레임 화면만 (0,0)에 375x720(app)/원본(web)으로 출력
+    document.querySelector(".showcase").classList.add("showcase--capture");
+  }
   buildRemote();
   wireFrames();
   render();
