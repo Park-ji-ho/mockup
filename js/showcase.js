@@ -1,16 +1,26 @@
 /* =========================================================
-   showcase.js — 시나리오 리모컨 + 웹/앱 동시 라이브 렌더
-   단일 상태(scenario)를 두 프레임에 같은 HTML로 주입. 테마는 전역 토글.
+   showcase.js — 시나리오 리모컨 + 웹/앱 동시 라이브 렌더 + 인터랙션
+   단일 상태(scenario)를 두 프레임에 같은 HTML로 주입.
+   목업 내부 버튼(data-action)·토글(data-acc/data-consent)도 같은 상태를
+   갱신하므로, 화면에서 이동해도 왼쪽 리모컨이 자동 동기화된다.
    ========================================================= */
 (function () {
   "use strict";
 
+  var TIMER_MAX = 598; // 9:58
+
   var scenario = {
-    step: 1, // 1 전환 안내 · 2 이메일 인증 · 3 계정 확인·병합 · 4 동의(국가별) · 5 완료
+    step: 1, // 1 안내 · 2 이메일 인증 · 3 계정 확인·병합 · 4 동의(국가별) · 5 완료
     theme: "light",
     loading: false,
     error: false,
     region: "KR",
+    dir: "", // 단계 전환 애니메이션 방향 (fwd/back), 렌더 후 소거
+    accounts: { hyundai: true, kia: true, genesis: true },
+    consents: { terms: true, privacy: true, extra: true },
+    marketing: false,
+    warn: false, // 필수 동의 미체크 강조
+    timerSec: TIMER_MAX,
   };
 
   var appFrame = document.getElementById("frame-app");
@@ -21,19 +31,43 @@
     if (window.UI) window.UI.showToast(msg, variant);
   }
 
-  /* 리모컨 시나리오 정의 */
+  /* ---- 상태 전이 헬퍼 ---- */
+  var loadingTimer = null;
+  function setStep(n) {
+    clearTimeout(loadingTimer); // 보류 중인 로딩 콜백이 이후 단계를 덮어쓰지 않도록
+    scenario.dir = n > scenario.step ? "fwd" : n < scenario.step ? "back" : "";
+    scenario.step = n;
+    scenario.loading = false;
+    scenario.error = false;
+    scenario.warn = false;
+  }
+  function withLoading(ms, done) {
+    clearTimeout(loadingTimer);
+    scenario.loading = true;
+    render();
+    loadingTimer = setTimeout(function () {
+      scenario.loading = false;
+      done();
+      render();
+    }, ms);
+  }
+
+  /* ---- 리모컨 ---- */
   var GROUPS = [
     {
       label: "단계",
-      items: [
-        { t: "S1", act: function (s) { s.step = 1; s.loading = false; s.error = false; }, on: function (s) { return s.step === 1; } },
-        { t: "S2", act: function (s) { s.step = 2; s.loading = false; s.error = false; }, on: function (s) { return s.step === 2; } },
-        { t: "S3", act: function (s) { s.step = 3; s.loading = false; s.error = false; }, on: function (s) { return s.step === 3; } },
-        { t: "S4", act: function (s) { s.step = 4; s.loading = false; s.error = false; }, on: function (s) { return s.step === 4; } },
-        { t: "S5", act: function (s) { s.step = 5; s.loading = false; s.error = false; }, on: function (s) { return s.step === 5; } },
-        { t: "‹", act: function (s) { s.step = Math.max(1, s.step - 1); }, on: function () { return false; } },
-        { t: "›", act: function (s) { s.step = Math.min(5, s.step + 1); }, on: function () { return false; } },
-      ],
+      items: [1, 2, 3, 4, 5]
+        .map(function (n) {
+          return {
+            t: "S" + n,
+            act: function () { setStep(n); },
+            on: function (s) { return s.step === n; },
+          };
+        })
+        .concat([
+          { t: "‹", act: function () { setStep(Math.max(1, scenario.step - 1)); }, on: function () { return false; } },
+          { t: "›", act: function () { setStep(Math.min(5, scenario.step + 1)); }, on: function () { return false; } },
+        ]),
     },
     {
       label: "상태",
@@ -45,11 +79,17 @@
     },
     {
       label: "국가",
-      items: [
-        { t: "KR", act: function (s) { s.region = "KR"; }, on: function (s) { return s.region === "KR"; } },
-        { t: "EU", act: function (s) { s.region = "EU"; }, on: function (s) { return s.region === "EU"; } },
-        { t: "中", act: function (s) { s.region = "CN"; }, on: function (s) { return s.region === "CN"; } },
-      ],
+      items: ["KR", "EU", "CN"].map(function (r) {
+        return {
+          t: r === "CN" ? "中" : r,
+          act: function (s) {
+            s.region = r;
+            s.consents.extra = true; // 지역 전환 시 추가 동의 초기화
+            s.warn = false;
+          },
+          on: function (s) { return s.region === r; },
+        };
+      }),
     },
     {
       label: "테마",
@@ -60,7 +100,7 @@
     },
   ];
 
-  var buttonRefs = []; // {el, on}
+  var buttonRefs = [];
 
   function buildRemote() {
     GROUPS.forEach(function (group) {
@@ -90,17 +130,98 @@
     });
   }
 
+  /* ---- 렌더 ---- */
   function render() {
     var html = window.SCREENS[scenario.step](scenario);
     appFrame.innerHTML = html;
     webFrame.innerHTML = html;
     document.documentElement.setAttribute("data-theme", scenario.theme);
     refreshRemote();
+    scenario.dir = ""; // 전환 애니메이션은 1회만
   }
 
-  /* init */
+  /* ---- 목업 내부 인터랙션 (data-action / data-acc / data-consent) ---- */
+  var ACTIONS = {
+    start: function () { withLoading(600, function () { setStep(2); }); },
+    later: function () { toast("다음에 다시 안내해 드릴게요."); },
+    info: function () { toast("상세 안내 페이지로 이동합니다. (목업)"); },
+    back: function () { setStep(Math.max(1, scenario.step - 1)); render(); },
+    send: function () {
+      scenario.timerSec = TIMER_MAX;
+      scenario.error = false;
+      toast("인증번호를 발송했습니다.");
+      render();
+    },
+    verify: function () {
+      if (scenario.error) {
+        toast("인증번호를 다시 확인해 주세요.", "danger");
+        render(); // is-shake 재생
+        return;
+      }
+      withLoading(500, function () { setStep(3); });
+    },
+    merge: function () { withLoading(800, function () { setStep(4); }); },
+    agree: function () {
+      var needExtra = scenario.region !== "KR";
+      var ok = scenario.consents.terms && scenario.consents.privacy && (!needExtra || scenario.consents.extra);
+      if (!ok) {
+        scenario.warn = true;
+        toast("필수 항목에 동의해 주세요.", "danger");
+        render();
+        return;
+      }
+      withLoading(600, function () { setStep(5); });
+    },
+    share: function () { toast("카카오톡 공유 화면을 여는 목업입니다."); },
+    finish: function () { toast("통합 계정으로 서비스를 시작합니다! 🎉"); },
+  };
+
+  function wireFrames() {
+    [appFrame, webFrame].forEach(function (frame) {
+      frame.addEventListener("click", function (e) {
+        var actEl = e.target.closest("[data-action]");
+        if (actEl && frame.contains(actEl)) {
+          var fn = ACTIONS[actEl.dataset.action];
+          if (fn && !actEl.disabled) fn();
+          return;
+        }
+        var acc = e.target.closest("[data-acc]");
+        if (acc) {
+          var k = acc.dataset.acc;
+          scenario.accounts[k] = !scenario.accounts[k];
+          render();
+          return;
+        }
+        var con = e.target.closest("[data-consent]");
+        if (con) {
+          var key = con.dataset.consent;
+          if (key === "marketing") scenario.marketing = !scenario.marketing;
+          else scenario.consents[key] = !scenario.consents[key];
+          if (scenario.consents.terms && scenario.consents.privacy && (scenario.region === "KR" || scenario.consents.extra)) {
+            scenario.warn = false; // 필수가 모두 채워지면 경고 해제
+          }
+          render();
+        }
+      });
+    });
+  }
+
+  /* ---- 인증 타이머 (step 2에서만 카운트다운, 재렌더 없이 텍스트만 갱신) ---- */
+  setInterval(function () {
+    if (scenario.step !== 2 || scenario.loading || scenario.timerSec <= 0) return;
+    scenario.timerSec--;
+    var m = Math.floor(scenario.timerSec / 60);
+    var s = scenario.timerSec % 60;
+    var txt = m + ":" + (s < 10 ? "0" : "") + s;
+    document.querySelectorAll(".oneid__timer").forEach(function (el) {
+      el.textContent = txt;
+    });
+  }, 1000);
+
+  /* ---- init ---- */
   var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
   scenario.theme = mq && mq.matches ? "dark" : "light";
   buildRemote();
+  wireFrames();
   render();
 })();

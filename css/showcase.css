@@ -332,4 +332,79 @@
   position: absolute; inset: 0; z-index: 5;
   display: flex; align-items: center; justify-content: center;
   background: color-mix(in srgb, var(--surface) 66%, transparent);
+  animation: oneid-fade var(--dur-standard) var(--ease-standard);
+}
+
+/* ---------------------------------------------------------
+   Animations — 단계 전환/체크/완료/에러
+   --------------------------------------------------------- */
+/* 단계 전환: 앞으로 = 오른쪽에서, 뒤로 = 왼쪽에서 슬라이드 */
+.oneid__content.anim-fwd { animation: oneid-slide-fwd var(--dur-standard) var(--ease-standard); }
+.oneid__content.anim-back { animation: oneid-slide-back var(--dur-standard) var(--ease-standard); }
+@keyframes oneid-slide-fwd {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes oneid-slide-back {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes oneid-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* 현재 도트 팝 */
+.oneid__dot--now { animation: oneid-pop 0.28s var(--ease-standard); }
+@keyframes oneid-pop {
+  from { transform: scale(0.55); }
+  to { transform: scale(1); }
+}
+
+/* 체크 팝 */
+.oneid__check { animation: oneid-pop 0.22s var(--ease-standard); }
+
+/* 완료 서클 바운스 */
+.oneid__done-circle { animation: oneid-bounce 0.5s var(--ease-standard); }
+@keyframes oneid-bounce {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.oneid__bubble { animation: oneid-rise 0.4s var(--ease-standard) both; animation-delay: 0.15s; }
+@keyframes oneid-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 토글 가능한 행 */
+.oneid__acct,
+.oneid__consent {
+  cursor: pointer;
+  transition: border-color 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+}
+.oneid__acct:hover,
+.oneid__consent:hover { background: var(--surface-low); }
+.oneid__acct--off { opacity: 0.55; }
+.oneid__acct--off .oneid__mark { background: var(--surface-accent); color: var(--text-tertiary); }
+
+/* 에러: 흔들림 + 필드 강조 */
+.is-shake { animation: oneid-shake 0.4s ease; }
+@keyframes oneid-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.oneid .field__input.is-invalid { border-color: var(--danger); }
+.oneid__consent--warn {
+  border-color: var(--danger);
+  animation: oneid-shake 0.4s ease;
+}
+
+/* 접근성: 모션 최소화 선호 시 애니메이션 제거 */
+@media (prefers-reduced-motion: reduce) {
+  .oneid__content.anim-fwd, .oneid__content.anim-back,
+  .oneid__dot--now, .oneid__check, .oneid__done-circle,
+  .oneid__bubble, .is-shake, .oneid__consent--warn, .oneid__overlay {
+    animation: none;
+  }
 }
