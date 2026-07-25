@@ -74,7 +74,7 @@
       '<div class="oneid__links"><span data-action="info">Pleos 계정 알아보기</span><i>|</i><span data-action="info">Pleos 계정 전환 방법</span></div>' +
       '<div class="oneid__pleos"><em>Pleos</em></div>' +
       '<div class="oneid__notice oneid__notice--fill">2027.1.25까지 미전환 시<br />기존 계정 로그인 불가</div>' +
-      '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>';
+      '<p class="oneid__caption">혜택과 포인트는 그대로 유지됩니다</p>';
     var footer =
       '<button class="btn btn--filled btn--block" data-action="start">지금 전환하기 (약 1분)</button>' +
       '<button class="btn btn--outline btn--block" data-action="later">다음에 하기</button>';
