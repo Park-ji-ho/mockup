@@ -1,180 +1,161 @@
 /* =========================================================
-   screens.js — 신규 통합 계정 전환 4단계 흐름 마크업 SSOT
+   screens.js — 신규 통합 계정 전환 5단계 흐름 마크업 SSOT
+   메인 디자인: 실서비스(One ID) 스타일 — 화이트 배경 · 블랙 버튼 ·
+   중앙 정렬 · 숫자 도트 인디케이터. Pleos Connect 토큰으로 구현(서브).
    SCREENS[step](state) => htmlString. 같은 HTML을 웹/앱 프레임에 동시 주입.
-   레이아웃 차이는 showcase.css의 @container 규칙이 담당.
-   state = { step, theme, loading, error, selectedAccount, toast }
+   웹 = 모바일을 옆으로 늘려 가운데 정렬(@container, showcase.css).
+   state = { step(1~5), theme, loading, error, region(KR|EU|CN) }
    ========================================================= */
 (function () {
   "use strict";
 
-  var STEPS = [
-    { t: "본인 확인", s: "휴대폰 번호로 본인을 인증합니다" },
-    { t: "전환할 계정 선택", s: "통합할 기존 계정을 고릅니다" },
-    { t: "통합 정보 확인", s: "전환될 정보를 최종 확인합니다" },
-    { t: "전환 완료", s: "통합 계정 사용을 시작합니다" },
-  ];
-
-  var ACCOUNTS = {
-    personal: { icon: "🙂", name: "개인 계정", id: "user****@email.com" },
-    work: { icon: "💼", name: "업무용 계정", id: "work****@company.com" },
-  };
-
-  /* 상단 내비 (Depth) */
-  function nav(step) {
+  /* 상단 브랜드 헤더 */
+  function brand() {
     return (
-      '<nav class="pagenav mig__nav">' +
-      '<span class="pagenav__back">‹</span>' +
-      '<span class="pagenav__titles"><span class="pagenav__title">통합 계정 전환</span>' +
-      '<span class="pagenav__subtitle">' + step + " / 4 단계</span></span>" +
-      '<span class="pagenav__suffix">⋯</span>' +
-      "</nav>"
+      '<header class="oneid__brand"><b>HYUNDAI MOTOR GROUP ONE ID</b>' +
+      '<span><em>Pleos</em> Account</span></header>'
     );
   }
 
-  /* 단계 레일 (웹=세로 스텝, 앱=상단 인디케이터) */
-  function rail(step) {
-    var dots = "";
-    for (var i = 1; i <= 4; i++) {
-      dots +=
-        '<span class="indicator__dot' + (i <= step ? " indicator__dot--active" : "") + '"></span>';
+  /* 도트 인디케이터 — 현재 단계는 숫자 블랙 서클 */
+  function dots(step) {
+    var out = "";
+    for (var i = 1; i <= 5; i++) {
+      if (i === step) out += '<span class="oneid__dot oneid__dot--now">' + i + "</span>";
+      else out += '<span class="oneid__dot' + (i < step ? " oneid__dot--done" : "") + '"></span>';
     }
-    var items = STEPS.map(function (s, i) {
-      var n = i + 1;
-      var cls = n === step ? " steps__item--active" : "";
-      return (
-        '<li class="steps__item' + cls + '">' +
-        '<span class="steps__num">' + (n < step ? "✓" : n) + "</span>" +
-        '<span class="steps__body"><span class="steps__label">' + s.t + "</span>" +
-        '<span class="steps__sub">' + s.s + "</span></span></li>"
-      );
-    }).join("");
-    return (
-      '<aside class="mig__aside">' +
-      '<span class="indicator indicator--wide mig__dots">' + dots + "</span>" +
-      '<ol class="steps mig__steps">' + items + "</ol>" +
-      "</aside>"
-    );
-  }
-
-  /* 하단 액션 */
-  function actions(label, opts) {
-    opts = opts || {};
-    var helper = opts.helper
-      ? '<p class="helper-text">' + opts.helper + "</p>"
-      : "";
-    var back = opts.back
-      ? '<button class="btn btn--basic">이전</button>'
-      : "";
-    return (
-      '<div class="actionbar mig__actions">' +
-      '<div class="mig__actions-row">' + back +
-      '<button class="btn btn--filled btn--block">' + label + "</button></div>" +
-      helper +
-      "</div>"
-    );
+    return '<div class="oneid__dots">' + out + "</div>";
   }
 
   function overlay(state) {
     return state.loading
-      ? '<div class="mig__overlay"><span class="loading loading--tension"><span class="spinner"></span></span></div>'
+      ? '<div class="oneid__overlay"><span class="loading loading--tension"><span class="spinner"></span></span></div>'
       : "";
   }
 
-  function shell(step, state, mainHtml) {
+  function shell(step, state, main) {
     return (
-      '<div class="mig">' +
-      nav(step) +
-      '<div class="mig__body">' +
-      rail(step) +
-      '<div class="mig__main">' + mainHtml + "</div>" +
+      '<div class="oneid">' +
+      brand() +
+      '<div class="oneid__scroll">' +
+      dots(step) +
+      '<div class="oneid__content">' + main + "</div>" +
       "</div>" +
       overlay(state) +
       "</div>"
     );
   }
 
-  /* ---- Step 1: 본인 확인 ---- */
+  /* ---- STEP 1 · 전환 안내 ---- */
   function step1(state) {
-    var errCls = state.error ? " is-error" : "";
     var main =
-      '<div class="mig__head"><h2 class="mig__title">본인 확인</h2>' +
-      '<p class="mig__desc">전환을 위해 본인 인증이 필요합니다.</p></div>' +
-      '<div class="field"><label class="field__label">통신사</label>' +
-      '<div class="dropdown"><button class="dropdown__trigger">' +
-      '<span class="dropdown__label">SKT</span><span class="dropdown__suffix">▾</span></button>' +
-      '<div class="dropdown__container"><div class="dropdown__item dropdown__item--selected">SKT</div>' +
-      '<div class="dropdown__item">KT</div><div class="dropdown__item">LG U+</div></div></div></div>' +
-      '<div class="field"><label class="field__label">이름</label>' +
-      '<input class="field__input" placeholder="이름을 입력하세요" /></div>' +
-      '<div class="field' + errCls + '"><label class="field__label">휴대폰 번호</label>' +
-      '<div class="mig__inline"><input class="field__input" placeholder="010-0000-0000" inputmode="numeric" />' +
-      '<button class="btn btn--basic btn--sm">인증요청</button></div>' +
-      (state.error
-        ? '<p class="field__error">인증번호가 올바르지 않습니다.</p>'
-        : "") +
-      "</div>" +
-      actions("다음", { helper: "전환 후에도 기존 데이터는 그대로 유지됩니다." });
+      '<h2 class="oneid__title">하나의 계정으로,<br />모든 그룹 서비스</h2>' +
+      '<div class="oneid__links"><span>Pleos 계정 알아보기</span><i>|</i><span>Pleos 계정 전환 방법</span></div>' +
+      '<div class="oneid__pleos"><em>Pleos</em></div>' +
+      '<div class="oneid__notice oneid__notice--fill">⚠ 2027.1.25 까지 미전환 시<br />기존 계정 로그인 불가</div>' +
+      '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>' +
+      '<div class="oneid__actions">' +
+      '<button class="btn btn--filled btn--block">지금 전환하기 ( 약 1분 )</button>' +
+      '<button class="btn btn--outline btn--block">다음에 하기 — 계속 이용</button>' +
+      "</div>";
     return shell(1, state, main);
   }
 
-  /* ---- Step 2: 계정 선택 ---- */
+  /* ---- STEP 2 · 이메일 인증 ---- */
   function step2(state) {
-    function accRow(key) {
-      var a = ACCOUNTS[key];
-      var sel = state.selectedAccount === key ? " account--selected" : "";
-      return (
-        '<label class="account' + sel + '" data-account="' + key + '">' +
-        '<span class="account__avatar">' + a.icon + "</span>" +
-        '<span class="account__meta"><span class="account__name">' + a.name + "</span>" +
-        '<span class="account__id">' + a.id + "</span></span>" +
-        '<span class="account__radio"></span></label>'
-      );
-    }
     var main =
-      '<div class="mig__head"><h2 class="mig__title">전환할 계정 선택</h2>' +
-      '<p class="mig__desc">선택한 계정이 통합 계정으로 전환됩니다.</p></div>' +
-      '<div class="tabs tabs--box tabs--fitted mig__filter"><div class="tabs__list">' +
-      '<button class="tabs__tab tabs__tab--selected">전체</button>' +
-      '<button class="tabs__tab">개인</button>' +
-      '<button class="tabs__tab">업무</button></div></div>' +
-      '<div class="account-list">' + accRow("personal") + accRow("work") + "</div>" +
-      actions("다음", { back: true });
+      '<h2 class="oneid__title">이메일 인증</h2>' +
+      '<p class="oneid__desc">Pleos 계정에 사용할<br />이메일을 인증해 주세요</p>' +
+      '<div class="oneid__field oneid__inline">' +
+      '<input class="field__input" value="jiho@email.com" />' +
+      '<button class="btn btn--outline oneid__send">전송</button>' +
+      "</div>" +
+      '<div class="oneid__field oneid__inline">' +
+      '<input class="field__input" placeholder="인증번호 6자리 입력" inputmode="numeric" />' +
+      '<span class="oneid__timer">9:58</span>' +
+      "</div>" +
+      (state.error
+        ? '<p class="oneid__error">인증번호가 올바르지 않습니다. 다시 확인해 주세요.</p>'
+        : "") +
+      '<p class="oneid__caption oneid__caption--left">인증번호 전송은 하루 5회까지 가능합니다</p>' +
+      '<div class="oneid__notice">✓ 인증한 이메일이<br /><b>Pleos 계정 ID 가 됩니다</b></div>' +
+      '<p class="oneid__caption">개인정보 처리 안내 보기 →</p>' +
+      '<div class="oneid__actions"><button class="btn btn--filled btn--block">확인</button></div>';
     return shell(2, state, main);
   }
 
-  /* ---- Step 3: 정보 확인 ---- */
+  /* ---- STEP 3 · 계정 확인 · 병합 ---- */
   function step3(state) {
-    var a = ACCOUNTS[state.selectedAccount] || ACCOUNTS.personal;
+    function acct(mark, name, sub) {
+      return (
+        '<div class="oneid__acct">' +
+        '<span class="oneid__mark">' + mark + "</span>" +
+        '<span class="oneid__acct-meta"><span class="oneid__acct-name">' + name + "</span>" +
+        '<span class="oneid__acct-sub">' + sub + "</span></span>" +
+        '<span class="oneid__check">✓</span></div>'
+      );
+    }
     var main =
-      '<div class="mig__head"><h2 class="mig__title">통합 정보 확인</h2>' +
-      '<p class="mig__desc">아래 정보로 통합 계정이 생성됩니다.</p></div>' +
-      '<div class="widget mig__summary"><div class="widget__info">' +
-      '<div class="mig__kv"><span>전환 대상</span><b>' + a.name + "</b></div>" +
-      '<div class="mig__kv"><span>기존 계정</span><b>' + a.id + "</b></div>" +
-      '<div class="mig__kv"><span>통합 계정 ID</span><b>one****@myservice.com</b></div>' +
-      "</div></div>" +
-      '<label class="mig__agree"><span class="switch"><span class="switch__knob"></span></span>' +
-      "<span>통합 약관 및 개인정보 이전에 동의합니다.</span></label>" +
-      actions("전환하기", { back: true });
+      '<h2 class="oneid__title">박지호님의 계정<br />3 개를 찾았어요</h2>' +
+      '<div class="oneid__acct-list">' +
+      acct("H", "마이현대", "차량 1 · 32,000P") +
+      acct("K", "Kia App", "구독 1건") +
+      acct("G", "MY GENESIS", "이용 이력") +
+      "</div>" +
+      '<p class="oneid__caption">인증 이메일 기준 보유 계정 자동 조회</p>' +
+      '<div class="oneid__actions"><button class="btn btn--filled btn--block">하나로 합치기</button></div>';
     return shell(3, state, main);
   }
 
-  /* ---- Step 4: 완료 ---- */
+  /* ---- STEP 4 · 동의 (국가별) ---- */
   function step4(state) {
+    var region = state.region || "KR";
+    function row(tag, label, optional) {
+      return (
+        '<div class="oneid__consent"><span class="oneid__consent-label">[ ' + tag + " ] " + label + "</span>" +
+        (optional
+          ? '<span class="oneid__radio"></span>'
+          : '<span class="oneid__check">✓</span>') +
+        "</div>"
+      );
+    }
+    var extra = "";
+    var noticeText = "EU: GDPR 재동의 · 中: 국외이전<br />단독동의로 자동 분기";
+    if (region === "EU") {
+      extra = row("필수", "GDPR 데이터 처리 재동의");
+      noticeText = "EU 지역: GDPR 재동의 항목이<br />추가로 표시됩니다";
+    } else if (region === "CN") {
+      extra = row("필수", "개인정보 국외이전 단독동의");
+      noticeText = "중국 지역: 국외이전 단독동의가<br />별도 단계로 표시됩니다";
+    }
+    var badge = { KR: "🇰🇷 KR", EU: "🇪🇺 EU", CN: "🇨🇳 CN" }[region];
     var main =
-      '<div class="mig__done">' +
-      '<div class="mig__done-check">✓</div>' +
-      '<h2 class="mig__title">전환이 완료됐어요</h2>' +
-      '<p class="mig__desc">이제 통합 계정 하나로 모든 서비스를 이용할 수 있어요.</p>' +
-      '<div class="sysnoti sysnoti--appicon mig__done-noti"><span class="sysnoti__imagery">🔐</span>' +
-      '<div class="sysnoti__body"><p class="sysnoti__title">통합 계정 준비 완료</p>' +
-      '<p class="sysnoti__desc">one****@myservice.com</p>' +
-      '<div class="sysnoti__actions sysnoti__actions--single"><button class="btn btn--filled btn--sm btn--block">시작하기</button></div>' +
-      "</div></div></div>" +
-      '<div class="actionbar mig__actions"><div class="mig__actions-row">' +
-      '<button class="btn btn--filled btn--block">홈으로</button></div></div>';
+      '<div class="oneid__region-wrap"><span class="oneid__region">' + badge + "</span></div>" +
+      '<h2 class="oneid__title oneid__title--left">약관 및 동의</h2>' +
+      '<div class="oneid__consent-list">' +
+      row("필수", "통합 계정 약관") +
+      row("필수", "개인정보 수집 · 이용") +
+      extra +
+      row("선택", "마케팅 수신", true) +
+      "</div>" +
+      '<div class="oneid__notice">' + noticeText + "</div>" +
+      '<div class="oneid__actions"><button class="btn btn--filled btn--block">동의하고 계속</button></div>';
     return shell(4, state, main);
   }
 
-  window.SCREENS = { 1: step1, 2: step2, 3: step3, 4: step4 };
+  /* ---- STEP 5 · 완료 ---- */
+  function step5(state) {
+    var main =
+      '<div class="oneid__done-circle">✓</div>' +
+      '<h2 class="oneid__title">전환 완료 !</h2>' +
+      '<p class="oneid__desc">자산 3 종 승계 완료<br />모든 서비스 바로 이용</p>' +
+      '<div class="oneid__bubble">2027.1.25 까지 전환하지 않으면<br />기존 계정을 쓸 수 없어요 !</div>' +
+      '<div class="oneid__actions">' +
+      '<button class="btn btn--outline btn--block">카카오톡으로 공유하기</button>' +
+      '<button class="btn btn--filled btn--block">시작하기</button>' +
+      "</div>";
+    return shell(5, state, main);
+  }
+
+  window.SCREENS = { 1: step1, 2: step2, 3: step3, 4: step4, 5: step5 };
 })();

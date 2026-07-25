@@ -1,6 +1,7 @@
 /* =========================================================
-   showcase.css — 시나리오 쇼케이스 셸 + 흐름(@container) 레이아웃
+   showcase.css — 시나리오 쇼케이스 셸 + One ID 흐름(@container)
    토큰만 사용. 로드 순서: tokens → style → components → showcase
+   웹 프레임 = 모바일 레이아웃을 옆으로 늘려 가운데 정렬(실서비스 방식).
    ========================================================= */
 
 /* ---- Shell ---- */
@@ -110,67 +111,225 @@
   background: var(--surface-high); border-bottom: 1px solid var(--border);
 }
 .frame--web .frame__dot { width: 10px; height: 10px; border-radius: var(--r-full); background: var(--surface-accent); }
-.frame--web .frame__viewport { width: 760px; height: 600px; }
+.frame--web .frame__viewport { width: 760px; height: 640px; }
 
 /* ---------------------------------------------------------
-   Migration flow — app(1열) 기본 / web(2열) = @container
+   One ID 흐름 — 실서비스 스타일 스킨 (토큰 매핑)
+   화이트 배경 · 블랙 버튼(basic_900) · 중앙 정렬 · r-sm 라운드.
+   웹(@container ≥720px) = 콘텐츠 컬럼을 늘려 가운데 정렬만 한다.
    --------------------------------------------------------- */
-.mig { position: relative; display: flex; flex-direction: column; height: 100%; background: var(--surface); }
-.mig__nav { flex-shrink: 0; }
-.mig__body { flex: 1; display: flex; flex-direction: column; overflow: auto; }
+.oneid {
+  position: relative;
+  display: flex; flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+}
 
-.mig__aside { padding: var(--sp-4) var(--sp-5) 0; }
-.mig__dots { display: inline-flex; }
-.mig__steps { display: none; }
+/* 브랜드 헤더 */
+.oneid__brand {
+  flex-shrink: 0;
+  text-align: center;
+  padding: var(--sp-5) var(--sp-4) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.oneid__brand b {
+  display: block;
+  font-size: var(--fs-title-s);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.01em;
+}
+.oneid__brand span { font-size: var(--fs-body-s); color: var(--text-tertiary); }
+.oneid__brand em { font-style: normal; font-weight: var(--fw-semibold); color: var(--text-secondary); }
 
-.mig__main { flex: 1; padding: var(--sp-4) var(--sp-5) var(--sp-6); }
-.mig__head { margin-bottom: var(--sp-5); }
-.mig__title { font-size: var(--fs-title-l); font-weight: var(--fw-bold); margin: 0 0 var(--sp-2); }
-.mig__desc { font-size: var(--fs-body-s); color: var(--text-tertiary); margin: 0; }
+.oneid__scroll { flex: 1; overflow: auto; }
 
-.mig__inline { display: flex; gap: var(--sp-2); align-items: stretch; }
-.mig__inline .field__input { flex: 1; }
-.mig__inline .btn { flex-shrink: 0; }
+/* 도트 인디케이터 */
+.oneid__dots {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  padding: var(--sp-5) 0 var(--sp-2);
+}
+.oneid__dot {
+  width: 8px; height: 8px;
+  border-radius: var(--r-full);
+  background: var(--surface-accent);
+}
+.oneid__dot--done { background: var(--basic-900); }
+.oneid__dot--now {
+  width: 24px; height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--basic-900); color: var(--basic-00);
+  font-size: 12px; font-weight: 700;
+}
 
-.field.is-error .field__input { border-color: var(--danger); }
-.field__error { margin: var(--sp-2) 0 0; font-size: var(--fs-label-s); color: var(--danger); }
+/* 콘텐츠 컬럼 — 앱: 좌우 20px / 웹: 늘려서 중앙 */
+.oneid__content { padding: var(--sp-2) var(--sp-5) var(--sp-8); }
+@container (min-width: 720px) {
+  .oneid__content {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: var(--sp-4) 0 var(--sp-10);
+  }
+  .oneid__brand { padding: var(--sp-6) 0 var(--sp-5); }
+}
 
-.mig__summary { margin-bottom: var(--sp-5); }
-.mig__kv { display: flex; justify-content: space-between; gap: var(--sp-4); padding: var(--sp-3) 0; font-size: var(--fs-body-s); color: var(--text-secondary); }
-.mig__kv + .mig__kv { border-top: 1px solid var(--border); }
-.mig__kv b { color: var(--text-primary); font-weight: var(--fw-semibold); }
+/* 텍스트 */
+.oneid__title {
+  margin: var(--sp-4) 0 var(--sp-3);
+  text-align: center;
+  font-size: var(--fs-title-l);
+  font-weight: var(--fw-bold);
+  line-height: 1.4;
+}
+.oneid__title--left { text-align: left; }
+.oneid__desc {
+  margin: 0 0 var(--sp-5);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--fs-body-s);
+  line-height: 1.6;
+}
+.oneid__caption {
+  margin: var(--sp-3) 0;
+  text-align: center;
+  font-size: var(--fs-label-s);
+  color: var(--text-quaternary);
+}
+.oneid__caption--left { text-align: left; margin-top: var(--sp-2); }
+.oneid__links {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-3);
+  margin: var(--sp-2) 0 var(--sp-4);
+  font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
+}
+.oneid__links i { font-style: normal; color: var(--surface-accent); }
 
-.mig__agree { display: flex; align-items: center; gap: var(--sp-3); margin: var(--sp-4) 0 var(--sp-6); font-size: var(--fs-body-s); }
+/* Pleos 원형 그래픽 */
+.oneid__pleos {
+  width: 128px; height: 128px;
+  margin: var(--sp-6) auto;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  font-size: var(--fs-title-m);
+}
+.oneid__pleos em { font-style: normal; font-weight: var(--fw-semibold); }
 
-.mig__actions { display: flex; flex-direction: column; }
-.mig__actions-row { display: flex; gap: var(--sp-3); }
-.mig__actions-row .btn--basic { flex: 0 0 96px; }
+/* 안내 박스 */
+.oneid__notice {
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  border-radius: var(--r-sm);
+  background: var(--primary-weak);
+  color: var(--info);
+  font-size: var(--fs-body-s);
+  text-align: center;
+  line-height: 1.55;
+}
+.oneid__notice--fill {
+  background: var(--info);
+  color: #fff;
+  font-weight: var(--fw-semibold);
+}
 
-.mig__overlay {
+/* 버튼 스택 — One ID 스킨(블랙/아웃라인, r-sm) */
+.oneid__actions { display: flex; flex-direction: column; gap: var(--sp-3); margin-top: var(--sp-5); }
+.oneid .btn--filled { background: var(--basic-900); color: var(--basic-00); border-radius: var(--r-sm); }
+.oneid .btn--filled:hover { background: var(--basic-800); }
+.oneid .btn--outline {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+}
+
+/* 입력 */
+.oneid__field { margin-bottom: var(--sp-3); }
+.oneid .field__input {
+  background: var(--surface);
+  border-radius: var(--r-sm);
+}
+.oneid__inline { display: flex; align-items: center; gap: var(--sp-2); position: relative; }
+.oneid__inline .field__input { flex: 1; }
+.oneid__send { flex-shrink: 0; height: 52px; padding: 0 var(--sp-5); }
+.oneid__timer {
+  position: absolute; right: var(--sp-4);
+  font-size: var(--fs-body-s); color: var(--text-tertiary);
+}
+.oneid__error { margin: var(--sp-2) 0 0; font-size: var(--fs-label-m); color: var(--danger); }
+
+/* 계정 카드 */
+.oneid__acct-list { margin: var(--sp-5) 0 var(--sp-2); }
+.oneid__acct {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-bottom: var(--sp-3);
+  background: var(--surface);
+}
+.oneid__mark {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm);
+  background: var(--basic-900); color: var(--basic-00);
+  font-size: var(--fs-label-m); font-weight: var(--fw-bold);
+}
+.oneid__acct-meta { display: flex; flex-direction: column; min-width: 0; }
+.oneid__acct-name { font-size: var(--fs-body-m); font-weight: var(--fw-semibold); }
+.oneid__acct-sub { font-size: var(--fs-label-m); color: var(--text-tertiary); }
+.oneid__check { margin-left: auto; color: var(--info); font-weight: var(--fw-bold); }
+
+/* 동의 (국가별) */
+.oneid__region-wrap { text-align: center; margin: var(--sp-3) 0 var(--sp-4); }
+.oneid__region {
+  display: inline-flex; align-items: center; gap: var(--sp-1);
+  padding: 6px 16px;
+  border-radius: var(--r-full);
+  background: var(--basic-900); color: var(--basic-00);
+  font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
+}
+.oneid__consent-list { margin: var(--sp-4) 0; }
+.oneid__consent {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-body-s);
+}
+.oneid__consent-label { font-weight: var(--fw-regular); color: var(--text-secondary); }
+.oneid__radio {
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 2px solid var(--surface-accent);
+  border-radius: var(--r-full);
+}
+
+/* 완료 */
+.oneid__done-circle {
+  width: 88px; height: 88px;
+  margin: var(--sp-8) auto var(--sp-2);
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid var(--info);
+  border-radius: var(--r-full);
+  color: var(--info);
+  font-size: 40px;
+}
+.oneid__bubble {
+  margin: var(--sp-5) 0 var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--info);
+  border-radius: var(--r-md);
+  color: var(--info);
+  font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
+  text-align: center;
+  line-height: 1.55;
+}
+
+/* 로딩 오버레이 */
+.oneid__overlay {
   position: absolute; inset: 0; z-index: 5;
   display: flex; align-items: center; justify-content: center;
   background: color-mix(in srgb, var(--surface) 66%, transparent);
-}
-
-.mig__done { text-align: center; padding: var(--sp-10) var(--sp-5) var(--sp-6); flex: 1; }
-.mig__done-check {
-  width: 64px; height: 64px; margin: 0 auto var(--sp-5);
-  display: flex; align-items: center; justify-content: center;
-  border-radius: var(--r-full); background: var(--success); color: #fff; font-size: 32px;
-}
-.mig__done-noti { margin-top: var(--sp-6); text-align: left; }
-
-/* Web layout — frame 폭 ≥ 720px */
-@container (min-width: 720px) {
-  .mig__body { flex-direction: row; }
-  .mig__aside {
-    width: 264px; flex-shrink: 0;
-    padding: var(--sp-8) var(--sp-6);
-    border-right: 1px solid var(--border);
-  }
-  .mig__dots { display: none; }
-  .mig__steps { display: flex; }
-  .mig__main { max-width: 560px; padding: var(--sp-8); }
-  .mig__actions { position: static; background: none; padding-left: 0; padding-right: 0; }
-  .mig__done { max-width: 560px; margin: 0 auto; }
 }

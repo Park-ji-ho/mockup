@@ -6,11 +6,11 @@
   "use strict";
 
   var scenario = {
-    step: 1,
+    step: 1, // 1 전환 안내 · 2 이메일 인증 · 3 계정 확인·병합 · 4 동의(국가별) · 5 완료
     theme: "light",
     loading: false,
     error: false,
-    selectedAccount: "personal",
+    region: "KR",
   };
 
   var appFrame = document.getElementById("frame-app");
@@ -21,7 +21,7 @@
     if (window.UI) window.UI.showToast(msg, variant);
   }
 
-  /* 리모컨 시나리오 정의 (레퍼런스 그룹 패턴) */
+  /* 리모컨 시나리오 정의 */
   var GROUPS = [
     {
       label: "단계",
@@ -30,23 +30,25 @@
         { t: "S2", act: function (s) { s.step = 2; s.loading = false; s.error = false; }, on: function (s) { return s.step === 2; } },
         { t: "S3", act: function (s) { s.step = 3; s.loading = false; s.error = false; }, on: function (s) { return s.step === 3; } },
         { t: "S4", act: function (s) { s.step = 4; s.loading = false; s.error = false; }, on: function (s) { return s.step === 4; } },
+        { t: "S5", act: function (s) { s.step = 5; s.loading = false; s.error = false; }, on: function (s) { return s.step === 5; } },
         { t: "‹", act: function (s) { s.step = Math.max(1, s.step - 1); }, on: function () { return false; } },
-        { t: "›", act: function (s) { s.step = Math.min(4, s.step + 1); }, on: function () { return false; } },
+        { t: "›", act: function (s) { s.step = Math.min(5, s.step + 1); }, on: function () { return false; } },
       ],
     },
     {
       label: "상태",
       items: [
         { t: "로딩", act: function (s) { s.loading = !s.loading; }, on: function (s) { return s.loading; } },
-        { t: "에러", act: function (s) { s.error = !s.error; if (s.error) toast("전환에 실패했습니다.", "danger"); }, on: function (s) { return s.error; } },
+        { t: "에러", act: function (s) { s.error = !s.error; if (s.error) toast("인증에 실패했습니다.", "danger"); }, on: function (s) { return s.error; } },
         { t: "토스트", act: function () { toast("인증번호를 발송했습니다."); }, on: function () { return false; } },
       ],
     },
     {
-      label: "계정",
+      label: "국가",
       items: [
-        { t: "개인", act: function (s) { s.selectedAccount = "personal"; }, on: function (s) { return s.selectedAccount === "personal"; } },
-        { t: "업무", act: function (s) { s.selectedAccount = "work"; }, on: function (s) { return s.selectedAccount === "work"; } },
+        { t: "KR", act: function (s) { s.region = "KR"; }, on: function (s) { return s.region === "KR"; } },
+        { t: "EU", act: function (s) { s.region = "EU"; }, on: function (s) { return s.region === "EU"; } },
+        { t: "中", act: function (s) { s.region = "CN"; }, on: function (s) { return s.region === "CN"; } },
       ],
     },
     {
@@ -96,23 +98,9 @@
     refreshRemote();
   }
 
-  /* 프리뷰 내부 계정 선택 → 공유 상태로 반영 */
-  function wireStage() {
-    [appFrame, webFrame].forEach(function (frame) {
-      frame.addEventListener("click", function (e) {
-        var acc = e.target.closest(".account[data-account]");
-        if (acc) {
-          scenario.selectedAccount = acc.dataset.account;
-          render();
-        }
-      });
-    });
-  }
-
   /* init */
   var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
   scenario.theme = mq && mq.matches ? "dark" : "light";
   buildRemote();
-  wireStage();
   render();
 })();
