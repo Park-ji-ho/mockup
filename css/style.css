@@ -37,3 +37,85 @@ body {
   margin: 0;
   opacity: 0.7;
 }
+
+/* 카드 블럭 */
+.card {
+  width: min(420px, 90vw);
+  margin-top: calc(var(--space) * 2);
+  padding: calc(var(--space) * 1.5);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.card__desc {
+  margin: 0 0 var(--space);
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* 버튼 */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* 일반 페이지 */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: calc(var(--space) * 2) var(--space);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space);
+}
+
+.page__nav {
+  margin-bottom: var(--space);
+}
+
+.link-back {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.link-back:hover {
+  text-decoration: underline;
+}
+
+.page__header h1 {
+  margin: 0 0 0.5rem;
+}
+
+.page__header p {
+  margin: 0;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+.steps {
+  margin: 0 0 var(--space);
+  padding-left: 1.25rem;
+  line-height: 2;
+}
