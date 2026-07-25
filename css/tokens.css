@@ -58,6 +58,15 @@
   /* ---- Layout ---- */
   --app-max: 480px;
 
+  /* ---- One ID 스킨 (실서비스 스타일 매핑 — DESIGN.md §5) ---- */
+  --oneid-radius: 6px;                 /* 버튼/입력/카드 라운드 */
+  --oneid-btn-bg: var(--basic-900);    /* 블랙 필 버튼 */
+  --oneid-btn-fg: var(--basic-00);
+  --oneid-btn-h: 52px;
+  --oneid-line: var(--basic-200);      /* 카드/입력 테두리 */
+  --oneid-dot: 8px;                    /* 단계 도트 */
+  --oneid-dot-now: 24px;               /* 현재 단계(숫자 서클) */
+
   /* ---- Back-compat aliases (기존 셸 컴포넌트용 → DESIGN 토큰 매핑) ---- */
   --color-bg: var(--bg-primary);
   --color-surface: var(--surface);

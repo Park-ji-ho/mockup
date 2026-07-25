@@ -104,6 +104,7 @@
 
   var buttonRefs = [];
 
+  var previewLink = null;
   function buildRemote() {
     GROUPS.forEach(function (group) {
       var lbl = document.createElement("div");
@@ -124,6 +125,13 @@
         buttonRefs.push({ el: btn, on: item.on });
       });
     });
+    // 미리보기 — 현재 단계/환경/테마 그대로 캔버스 내용만 새 탭에서
+    previewLink = document.createElement("a");
+    previewLink.className = "remote-link";
+    previewLink.textContent = "미리보기 ↗";
+    previewLink.target = "_blank";
+    previewLink.rel = "noopener";
+    remoteEl.appendChild(previewLink);
   }
 
   function refreshRemote() {
@@ -140,6 +148,11 @@
     stageEl.setAttribute("data-env", scenario.env); // 캔버스에는 선택한 환경만 표시
     document.documentElement.setAttribute("data-theme", scenario.theme);
     refreshRemote();
+    if (previewLink) {
+      previewLink.href =
+        "showcase.html?preview=1&step=" + scenario.step +
+        "&env=" + scenario.env + "&theme=" + scenario.theme;
+    }
     scenario.dir = ""; // 전환 애니메이션은 1회만
   }
 
@@ -213,9 +226,14 @@
     });
   }, 1000);
 
-  /* ---- init ---- */
-  var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
-  scenario.theme = mq && mq.matches ? "dark" : "light";
+  /* ---- init — 기본 테마는 라이트, URL 파라미터로 프리뷰/상태 복원 ---- */
+  var params = new URLSearchParams(location.search);
+  if (params.get("step")) scenario.step = Math.min(5, Math.max(1, parseInt(params.get("step"), 10) || 1));
+  if (params.get("env") === "app" || params.get("env") === "web") scenario.env = params.get("env");
+  if (params.get("theme") === "dark") scenario.theme = "dark";
+  if (params.get("preview") === "1") {
+    document.querySelector(".showcase").classList.add("showcase--preview");
+  }
   buildRemote();
   wireFrames();
   render();

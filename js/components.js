@@ -15,18 +15,10 @@
     });
   }
   function initTheme() {
-    var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
-    var manual = false;
-    setTheme(mq && mq.matches ? "dark" : "light");
-    if (mq && mq.addEventListener) {
-      mq.addEventListener("change", function (e) {
-        if (!manual) setTheme(e.matches ? "dark" : "light");
-      });
-    }
+    setTheme("light"); // 기본 테마는 라이트 (다크는 토글로만)
     document.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-theme-toggle]");
       if (!btn) return;
-      manual = true;
       setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
     });
   }
