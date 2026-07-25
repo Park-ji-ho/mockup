@@ -183,6 +183,25 @@
 }
 .oneid__scroll::-webkit-scrollbar { display: none; }
 
+/* 하단 고정 액션 푸터 — 버튼 스택이 페이지 바닥에 붙는다 */
+.oneid__footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5) var(--sp-5);
+  background: var(--surface);
+}
+@container (min-width: 720px) {
+  .oneid__footer {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 /* 도트 인디케이터 */
 .oneid__dots {
   display: flex; align-items: center; justify-content: center;
@@ -359,15 +378,35 @@
   color: var(--basic-900);
   font-size: 40px;
 }
+/* 말풍선 — 버튼 위에서 둥둥 떠 있는 경고 */
 .oneid__bubble {
-  margin: var(--sp-5) 0 var(--sp-2);
+  position: relative;
+  margin: 0 0 var(--sp-2);
   padding: var(--sp-3) var(--sp-4);
   border: 1px solid var(--basic-900);
   border-radius: var(--r-md);
+  background: var(--surface);
   color: var(--text-primary);
   font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
   text-align: center;
   line-height: 1.55;
+  animation: oneid-float 2.4s ease-in-out infinite;
+}
+/* 아래를 가리키는 꼬리 */
+.oneid__bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 12px; height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--surface);
+  border-right: 1px solid var(--basic-900);
+  border-bottom: 1px solid var(--basic-900);
+}
+@keyframes oneid-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 /* 화면 안 토스트 — 디바이스 하단 중앙 */
@@ -423,7 +462,12 @@
   60% { transform: scale(1.08); opacity: 1; }
   100% { transform: scale(1); }
 }
-.oneid__bubble { animation: oneid-rise 0.4s var(--ease-standard) both; animation-delay: 0.15s; }
+/* 등장(rise) 후 계속 둥둥(float) */
+.oneid__bubble {
+  animation:
+    oneid-rise 0.4s var(--ease-standard) 0.15s both,
+    oneid-float 2.4s ease-in-out 0.55s infinite;
+}
 @keyframes oneid-rise {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

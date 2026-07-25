@@ -187,7 +187,7 @@
       }
       withLoading(600, function () { setStep(5); });
     },
-    share: function () { toast("카카오톡 공유 화면을 여는 목업입니다."); },
+    share: function () { toast("공유 화면을 여는 목업입니다."); },
     finish: function () { toast("통합 계정으로 서비스를 시작합니다!"); },
   };
 

@@ -44,7 +44,8 @@
     );
   }
 
-  function shell(step, state, main) {
+  /* footer = 페이지 하단 고정 액션 영역(버튼 스택). 콘텐츠와 독립적으로 바닥에 붙는다 */
+  function shell(step, state, main, footer) {
     var anim = state.dir === "fwd" ? " anim-fwd" : state.dir === "back" ? " anim-back" : "";
     return (
       '<div class="oneid">' +
@@ -53,6 +54,7 @@
       dots(step) +
       '<div class="oneid__content' + anim + '">' + main + "</div>" +
       "</div>" +
+      (footer ? '<div class="oneid__footer' + anim + '">' + footer + "</div>" : "") +
       toastLayer(state) +
       overlay(state) +
       "</div>"
@@ -72,12 +74,11 @@
       '<div class="oneid__links"><span data-action="info">Pleos 계정 알아보기</span><i>|</i><span data-action="info">Pleos 계정 전환 방법</span></div>' +
       '<div class="oneid__pleos"><em>Pleos</em></div>' +
       '<div class="oneid__notice oneid__notice--fill">2027.1.25 까지 미전환 시<br />기존 계정 로그인 불가</div>' +
-      '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>' +
-      '<div class="oneid__actions">' +
+      '<p class="oneid__caption">혜택과 자산은 그대로 유지됩니다</p>';
+    var footer =
       '<button class="btn btn--filled btn--block" data-action="start">지금 전환하기 ( 약 1분 )</button>' +
-      '<button class="btn btn--outline btn--block" data-action="later">다음에 하기 — 계속 이용</button>' +
-      "</div>";
-    return shell(1, state, main);
+      '<button class="btn btn--outline btn--block" data-action="later">다음에 하기 — 계속 이용</button>';
+    return shell(1, state, main, footer);
   }
 
   /* ---- STEP 2 · 이메일 인증 ---- */
@@ -98,12 +99,11 @@
         : "") +
       '<p class="oneid__caption oneid__caption--left">인증번호 전송은 하루 5회까지 가능합니다</p>' +
       '<div class="oneid__notice">✓ 인증한 이메일이<br /><b>Pleos 계정 ID 가 됩니다</b></div>' +
-      '<p class="oneid__caption" data-action="info">개인정보 처리 안내 보기 →</p>' +
-      '<div class="oneid__actions">' +
+      '<p class="oneid__caption" data-action="info">개인정보 처리 안내 보기 →</p>';
+    var footer =
       '<button class="btn btn--filled btn--block" data-action="verify">확인</button>' +
-      '<button class="btn btn--outline btn--block" data-action="back">이전</button>' +
-      "</div>";
-    return shell(2, state, main);
+      '<button class="btn btn--outline btn--block" data-action="back">이전</button>';
+    return shell(2, state, main, footer);
   }
 
   /* ---- STEP 3 · 계정 확인 · 병합 (인증 이메일 기준 자동 조회 — 선택 아님) ---- */
@@ -125,12 +125,11 @@
       acct("K", "Kia App", "구독 1건") +
       acct("G", "MY GENESIS", "이용 이력") +
       "</div>" +
-      '<p class="oneid__caption">인증 이메일 기준 보유 계정 자동 조회</p>' +
-      '<div class="oneid__actions">' +
+      '<p class="oneid__caption">인증 이메일 기준 보유 계정 자동 조회</p>';
+    var footer =
       '<button class="btn btn--filled btn--block" data-action="merge">하나로 합치기</button>' +
-      '<button class="btn btn--outline btn--block" data-action="back">이전</button>' +
-      "</div>";
-    return shell(3, state, main);
+      '<button class="btn btn--outline btn--block" data-action="back">이전</button>';
+    return shell(3, state, main, footer);
   }
 
   /* ---- STEP 4 · 약관 및 동의 ---- */
@@ -150,12 +149,11 @@
       row("terms", "필수", "통합 계정 약관", state.consents.terms) +
       row("privacy", "필수", "개인정보 수집 · 이용", state.consents.privacy) +
       row("marketing", "선택", "마케팅 수신", state.marketing) +
-      "</div>" +
-      '<div class="oneid__actions">' +
-      '<button class="btn btn--filled btn--block" data-action="agree">동의하고 계속</button>' +
-      '<button class="btn btn--outline btn--block" data-action="back">이전</button>' +
       "</div>";
-    return shell(4, state, main);
+    var footer =
+      '<button class="btn btn--filled btn--block" data-action="agree">동의하고 계속</button>' +
+      '<button class="btn btn--outline btn--block" data-action="back">이전</button>';
+    return shell(4, state, main, footer);
   }
 
   /* ---- STEP 5 · 완료 ---- */
@@ -163,13 +161,12 @@
     var main =
       '<div class="oneid__done-circle">✓</div>' +
       '<h2 class="oneid__title">전환 완료 !</h2>' +
-      '<p class="oneid__desc">자산 3 종 승계 완료<br />모든 서비스 바로 이용</p>' +
+      '<p class="oneid__desc">자산 3 종 승계 완료<br />모든 서비스 바로 이용</p>';
+    var footer =
       '<div class="oneid__bubble">2027.1.25 까지 전환하지 않으면<br />기존 계정을 쓸 수 없어요 !</div>' +
-      '<div class="oneid__actions">' +
-      '<button class="btn btn--outline btn--block" data-action="share">카카오톡으로 공유하기</button>' +
-      '<button class="btn btn--filled btn--block" data-action="finish">시작하기</button>' +
-      "</div>";
-    return shell(5, state, main);
+      '<button class="btn btn--outline btn--block" data-action="share">공유하기</button>' +
+      '<button class="btn btn--filled btn--block" data-action="finish">시작하기</button>';
+    return shell(5, state, main, footer);
   }
 
   window.SCREENS = { 1: step1, 2: step2, 3: step3, 4: step4, 5: step5 };
