@@ -133,7 +133,7 @@
     return shell(3, state, main);
   }
 
-  /* ---- STEP 4 · 동의 (국가별 자동 분기 — 목업은 KR 화면) ---- */
+  /* ---- STEP 4 · 약관 및 동의 ---- */
   function step4(state) {
     function row(key, tag, label, checked) {
       var warn = state.warn && tag === "필수" && !checked ? " oneid__consent--warn" : "";
@@ -145,14 +145,12 @@
       );
     }
     var main =
-      '<div class="oneid__region-wrap"><span class="oneid__region">KR</span></div>' +
       '<h2 class="oneid__title oneid__title--left">약관 및 동의</h2>' +
       '<div class="oneid__consent-list">' +
       row("terms", "필수", "통합 계정 약관", state.consents.terms) +
       row("privacy", "필수", "개인정보 수집 · 이용", state.consents.privacy) +
       row("marketing", "선택", "마케팅 수신", state.marketing) +
       "</div>" +
-      '<div class="oneid__notice">EU: GDPR 재동의 · 中: 국외이전<br />단독동의로 자동 분기</div>' +
       '<div class="oneid__actions">' +
       '<button class="btn btn--filled btn--block" data-action="agree">동의하고 계속</button>' +
       '<button class="btn btn--outline btn--block" data-action="back">이전</button>' +

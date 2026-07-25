@@ -332,15 +332,7 @@
 .oneid__acct-sub { font-size: var(--fs-label-m); color: var(--text-tertiary); }
 .oneid__check { margin-left: auto; color: var(--info); font-weight: var(--fw-bold); }
 
-/* 동의 (국가별) */
-.oneid__region-wrap { text-align: center; margin: var(--sp-3) 0 var(--sp-4); }
-.oneid__region {
-  display: inline-flex; align-items: center; gap: var(--sp-1);
-  padding: 6px 16px;
-  border-radius: var(--r-full);
-  background: var(--basic-900); color: var(--basic-00);
-  font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
-}
+/* 약관 및 동의 */
 .oneid__consent-list { margin: var(--sp-4) 0; }
 .oneid__consent {
   display: flex; align-items: center; justify-content: space-between;
