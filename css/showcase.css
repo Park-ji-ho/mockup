@@ -1,0 +1,531 @@
+/* =========================================================
+   showcase.css — 시나리오 쇼케이스 셸 + uni(계정 전환) 흐름(@container)
+   토큰만 사용. 로드 순서: tokens → style → components → showcase
+   웹 프레임 = 모바일 레이아웃을 옆으로 늘려 가운데 정렬(실서비스 방식).
+   ========================================================= */
+
+/* ---- Shell ---- */
+.showcase {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  background: var(--bg-primary);
+}
+.showcase__bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  height: 56px;
+  padding: 0 var(--sp-5);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.showcase__back {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; margin-left: -6px;
+  font-size: 20px; color: var(--text-primary); border-radius: var(--r-full);
+}
+.showcase__title { font-size: var(--fs-title-s); font-weight: var(--fw-extrabold); }
+.showcase__hint { margin-left: auto; font-size: var(--fs-label-s); color: var(--text-tertiary); }
+
+/* ---- Remote ---- */
+.remote {
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  align-content: start;
+  padding: var(--sp-4);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.remote::-webkit-scrollbar { display: none; }
+.remote__group {
+  grid-column: 1 / -1;
+  font-size: var(--fs-label-s); font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 8px 2px 2px;
+}
+.remote-btn {
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.remote-btn:hover { background: var(--surface-low); color: var(--text-primary); }
+.remote-btn.active {
+  background: var(--primary); border-color: var(--primary); color: var(--basic-00);
+  box-shadow: var(--shadow-2);
+}
+.remote-btn:active { transform: scale(0.93); }
+
+/* 미리보기 링크 — 캔버스 내용만 보이는 프리뷰 모드로 이동 */
+.remote-link {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  height: 36px;
+  margin-top: var(--sp-3);
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.12s ease;
+}
+.remote-link:hover { background: var(--primary-weak); }
+
+/* ---- 프리뷰 모드 (?preview=1) — 셸 없이 화면을 꽉 채워 표시 ---- */
+.showcase--preview { grid-template-columns: 1fr; }
+.showcase--preview .showcase__bar,
+.showcase--preview .remote,
+.showcase--preview .frame__label { display: none; }
+.showcase--preview .stage {
+  grid-column: 1;
+  align-content: stretch;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.showcase--preview .frame { gap: 0; }
+.showcase--preview .frame__device {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.showcase--preview .frame--web .frame__chrome { display: none; }
+/* App = 실기기 비율(375:720), Web = 전체.
+   하단 내비(--prevnav-h)만큼 비워 두어 내비가 화면을 가리지 않게 한다. */
+.showcase--preview { --prevnav-h: 0px; }
+.showcase--preview.showcase--nav { --prevnav-h: 62px; }
+.showcase--preview .frame--app .frame__viewport {
+  height: calc(100vh - var(--prevnav-h));
+  width: min(100vw, calc((100vh - var(--prevnav-h)) * 375 / 720));
+}
+.showcase--preview .frame--web .frame__viewport {
+  width: 100vw;
+  height: calc(100vh - var(--prevnav-h));
+}
+.showcase--preview .stage { align-content: start; }
+
+/* ---- 캡처 모드 (?capture=1) — 화면만 좌상단에 원본 크기로 (스크린샷 내보내기용) ---- */
+.showcase--capture { display: block; height: auto; }
+.showcase--capture .showcase__bar,
+.showcase--capture .remote,
+.showcase--capture .frame__label { display: none; }
+.showcase--capture .stage { display: block; padding: 0; overflow: visible; }
+.showcase--capture .frame { display: block; }
+.showcase--capture .frame__device {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.showcase--capture .frame__chrome { display: none; }
+
+/* ---- Stage (web + app frames) ---- */
+.stage {
+  grid-row: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+  align-content: flex-start;
+  justify-content: center;
+  padding: var(--sp-8) var(--sp-6);
+  overflow: auto;
+}
+.frame { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+/* 환경 토글 — 캔버스에는 선택한 환경만 표시 */
+.stage[data-env="web"] .frame--app { display: none; }
+.stage[data-env="app"] .frame--web { display: none; }
+.frame__label {
+  font-size: var(--fs-label-s); font-weight: 700; letter-spacing: 0.08em;
+  color: var(--text-tertiary); text-transform: uppercase; text-align: center;
+}
+.frame__device {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  background: var(--surface);
+}
+.frame__viewport {
+  container-type: inline-size;
+  background: var(--surface);
+  overflow: hidden; /* 스크롤은 내부(.uni__scroll)가 담당 — 전환 시 스크롤바 번쩍임 방지 */
+}
+
+/* App device (mobile) */
+.frame--app .frame__device { border-radius: 32px; }
+.frame--app .frame__viewport { width: 375px; height: 720px; }
+
+/* Web device (browser window) */
+.frame--web .frame__device { border-radius: 12px; }
+.frame--web .frame__chrome {
+  display: flex; align-items: center; gap: 6px;
+  height: 36px; padding: 0 var(--sp-3);
+  background: var(--surface-high); border-bottom: 1px solid var(--border);
+}
+.frame--web .frame__dot { width: 10px; height: 10px; border-radius: var(--r-full); background: var(--surface-accent); }
+.frame--web .frame__viewport {
+  width: clamp(760px, calc(100vw - 420px), 1160px);
+  height: clamp(560px, calc(100vh - 230px), 780px);
+}
+
+/* ---------------------------------------------------------
+   uni 흐름 — 실서비스 스타일 스킨 (토큰 매핑)
+   화이트 배경 · 블랙 버튼(basic_900) · 중앙 정렬 · r-sm 라운드.
+   웹(@container ≥720px) = 콘텐츠 컬럼을 늘려 가운데 정렬만 한다.
+   --------------------------------------------------------- */
+.uni {
+  position: relative;
+  display: flex; flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+}
+
+/* 브랜드 헤더 */
+.uni__brand {
+  flex-shrink: 0;
+  text-align: center;
+  padding: var(--sp-5) var(--sp-4) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.uni__brand b {
+  display: block;
+  font-size: var(--fs-title-s);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: 0.01em;
+}
+.uni__brand span { font-size: var(--fs-body-s); color: var(--text-tertiary); }
+.uni__brand em { font-style: normal; font-weight: var(--fw-semibold); color: var(--text-secondary); }
+
+/* 세로 스크롤만 허용, 스크롤바는 숨김(모바일 관행) — 전환 애니메이션의
+   translateX가 가로 오버플로를 만들어도 스크롤바가 나타나지 않게 한다 */
+.uni__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.uni__scroll::-webkit-scrollbar { display: none; }
+
+/* 하단 고정 액션 푸터 — 버튼 스택이 페이지 바닥에 붙는다 */
+.uni__footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-5) var(--sp-5);
+  background: var(--surface);
+}
+@container (min-width: 720px) {
+  .uni__footer {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* 단계 표시 — DESIGN §4 Indicator(Wide) 재사용. 클릭 내비게이션만 덧붙인다 */
+.uni__dots {
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--sp-5) 0 var(--sp-2);
+}
+.uni__dots .indicator__dot {
+  cursor: pointer;
+  transition: opacity var(--dur-standard) var(--ease-standard), transform 0.12s ease;
+}
+.uni__dots .indicator__dot:hover { transform: scale(1.3); }
+
+/* 콘텐츠 컬럼 — 앱: 좌우 20px / 웹: 늘려서 중앙 */
+.uni__content { padding: var(--sp-2) var(--sp-5) var(--sp-8); }
+@container (min-width: 720px) {
+  .uni__content {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: var(--sp-4) 0 var(--sp-10);
+  }
+  .uni__brand { padding: var(--sp-6) 0 var(--sp-5); }
+}
+
+/* 텍스트 */
+.uni__title {
+  margin: var(--sp-4) 0 var(--sp-3);
+  text-align: center;
+  font-size: var(--fs-title-l);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-base);
+}
+.uni__title--left { text-align: left; }
+.uni__desc {
+  margin: 0 0 var(--sp-5);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--fs-body-s);
+  line-height: 1.6;
+}
+.uni__caption {
+  margin: var(--sp-3) 0;
+  text-align: center;
+  font-size: var(--fs-label-s);
+  color: var(--text-quaternary);
+}
+.uni__caption--left { text-align: left; margin-top: var(--sp-2); }
+.uni__links {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-3);
+  margin: var(--sp-2) 0 var(--sp-4);
+  font-size: var(--fs-body-s); font-weight: var(--fw-semibold);
+}
+.uni__links i { font-style: normal; color: var(--surface-accent); }
+
+/* 브랜드 원형 그래픽 */
+.uni__logo {
+  width: 128px; height: 128px;
+  margin: var(--sp-6) auto;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  font-size: var(--fs-title-m);
+}
+.uni__logo em { font-style: normal; font-weight: var(--fw-semibold); }
+
+/* 안내 박스 */
+.uni__notice {
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  border-radius: var(--uni-radius);
+  background: var(--primary-weak);
+  color: var(--text-secondary);
+  font-size: var(--fs-body-s);
+  text-align: center;
+  line-height: 1.55;
+}
+/* 강조 안내 — 버튼(블랙 필)과 혼동되지 않도록 회색 틴트 + 볼드 텍스트 */
+.uni__notice--fill {
+  background: var(--surface-high);
+  border: 1px solid var(--basic-300);
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+}
+
+/* 버튼 스택 — uni 스킨(블랙/아웃라인, r-sm) */
+.uni .btn--filled {
+  background: var(--uni-btn-bg);
+  color: var(--uni-btn-fg);
+  border-radius: var(--uni-radius);
+  height: var(--uni-btn-h);
+}
+.uni .btn--filled:hover { background: var(--basic-800); }
+.uni .btn--outline {
+  background: var(--surface);
+  border: 1px solid var(--uni-line);
+  border-radius: var(--uni-radius);
+  color: var(--text-primary);
+  font-weight: var(--fw-semibold);
+  height: var(--uni-btn-h);
+}
+
+/* 입력 — Text/Number Field에 uni 스킨(6px 라운드) 적용 */
+.uni__field { margin-bottom: var(--sp-3); }
+.uni .tfield__input {
+  background: var(--surface);
+  border-color: var(--uni-line);
+  border-radius: var(--uni-radius);
+}
+.uni .tfield__input { padding-right: var(--sp-10); } /* clear 버튼 자리 */
+.uni .numfield__cell {
+  border-color: var(--uni-line);
+  border-radius: var(--uni-radius);
+}
+.uni .numfield__cell--focused { border-color: var(--field-focused); }
+.uni .numfield--error .numfield__cell { border-color: var(--danger); }
+.uni__numrow { display: flex; align-items: center; gap: var(--sp-3); }
+.uni__numrow .uni__timer { position: static; }
+.uni__inline { display: flex; align-items: center; gap: var(--sp-2); position: relative; }
+.uni__inline .tfield { flex: 1; }
+.uni__send { flex-shrink: 0; height: 52px; padding: 0 var(--sp-5); }
+.uni__timer {
+  position: absolute; right: var(--sp-4);
+  font-size: var(--fs-body-s); color: var(--text-tertiary);
+}
+
+/* 계정 카드 */
+.uni__acct-list { margin: var(--sp-5) 0 var(--sp-2); }
+.uni__acct {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-4);
+  border: 1px solid var(--uni-line);
+  border-radius: var(--uni-radius);
+  margin-bottom: var(--sp-3);
+  background: var(--surface);
+}
+.uni__mark {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--r-sm);
+  background: var(--basic-900); color: var(--basic-00);
+  font-size: var(--fs-label-m); font-weight: var(--fw-extrabold);
+}
+.uni__acct-meta { display: flex; flex-direction: column; min-width: 0; }
+.uni__acct-name { font-size: var(--fs-body-m); font-weight: var(--fw-semibold); }
+.uni__acct-sub { font-size: var(--fs-label-m); color: var(--text-tertiary); }
+.uni__check { margin-left: auto; color: var(--basic-900); font-weight: var(--fw-extrabold); }
+
+/* 약관 및 동의 */
+.uni__consent-list { margin: var(--sp-4) 0; }
+.uni__consent {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-4);
+  border: 1px solid var(--uni-line);
+  border-radius: var(--uni-radius);
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-body-s);
+}
+.uni__consent-label { font-weight: var(--fw-regular); color: var(--text-secondary); }
+
+/* 완료 */
+.uni__done-circle {
+  width: 88px; height: 88px;
+  margin: var(--sp-8) auto var(--sp-2);
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid var(--basic-900);
+  border-radius: var(--r-full);
+  color: var(--basic-900);
+  font-size: 40px;
+}
+/* 말풍선 — 버튼 위에서 둥둥, 지인 추천 넛지 (그레이 필) */
+.uni__bubble {
+  position: relative;
+  margin: 0 0 var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--surface-high);
+  color: var(--text-secondary);
+  font-size: var(--fs-label-s); font-weight: var(--fw-semibold);
+  text-align: center;
+  line-height: 1.55;
+  animation: uni-float 2.4s ease-in-out infinite;
+}
+/* 아래를 가리키는 꼬리 */
+.uni__bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 12px; height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--surface-high);
+}
+@keyframes uni-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* 화면 안 토스트 — 디바이스 하단 중앙 */
+/* 스펙: 화면 하단 Center, 화면 여백(좌/우/하단) 24 — 토스트 자체 패딩은 컴포넌트 스펙 그대로 */
+.uni__toast {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-6);
+  transform: translateX(-50%);
+  z-index: 6;
+  width: max-content;
+  max-width: calc(100% - (var(--sp-6) * 2));
+}
+
+/* 로딩 오버레이 */
+.uni__overlay {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--surface) 66%, transparent);
+  animation: uni-fade var(--dur-standard) var(--ease-standard);
+}
+
+/* ---------------------------------------------------------
+   Animations — 단계 전환/체크/완료/에러
+   --------------------------------------------------------- */
+/* 단계 전환: 앞으로 = 오른쪽에서, 뒤로 = 왼쪽에서 슬라이드 */
+.uni__content.anim-fwd { animation: uni-slide-fwd var(--dur-standard) var(--ease-standard); }
+.uni__content.anim-back { animation: uni-slide-back var(--dur-standard) var(--ease-standard); }
+@keyframes uni-slide-fwd {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes uni-slide-back {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes uni-fade { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes uni-pop {
+  from { transform: scale(0.55); }
+  to { transform: scale(1); }
+}
+
+/* 체크 팝 */
+.uni__check { animation: uni-pop 0.22s var(--ease-standard); }
+
+/* 완료 서클 바운스 */
+.uni__done-circle { animation: uni-bounce 0.5s var(--ease-standard); }
+@keyframes uni-bounce {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+/* 등장(rise) 후 계속 둥둥(float) */
+.uni__bubble {
+  animation:
+    uni-rise 0.4s var(--ease-standard) 0.15s both,
+    uni-float 2.4s ease-in-out 0.55s infinite;
+}
+@keyframes uni-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 토글 가능한 행 — 동의 항목만 (계정 목록은 자동 조회라 정적) */
+.uni__consent {
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.uni__consent:hover { background: var(--surface-low); }
+
+/* 에러: 흔들림 + 필드 강조 */
+.is-shake { animation: uni-shake 0.4s ease; }
+@keyframes uni-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.uni__consent--warn {
+  border-color: var(--danger);
+  animation: uni-shake 0.4s ease;
+}
+
+/* 접근성: 모션 최소화 선호 시 애니메이션 제거 */
+@media (prefers-reduced-motion: reduce) {
+  .uni__content.anim-fwd, .uni__content.anim-back,
+  .uni__check, .uni__done-circle,
+  .uni__bubble, .is-shake, .uni__consent--warn, .uni__overlay {
+    animation: none;
+  }
+}

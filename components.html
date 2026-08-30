@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>컴포넌트 라이브러리 | Portfolio Mockup</title>
+    <!-- 로드 순서: tokens → style(base) → components -->
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <style>
+      body { background: var(--bg-primary); }
+      .gallery { max-width: 1000px; margin: 0 auto; padding: var(--sp-8) var(--sp-6) var(--sp-10); }
+      .gallery__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-8); }
+      .gallery__head h1 { font-size: var(--fs-headline-l); font-weight: var(--fw-extrabold); margin: 0; }
+      .gallery__sub { color: var(--text-tertiary); font-size: var(--fs-body-s); margin-top: var(--sp-1); }
+      .sec { margin-bottom: var(--sp-8); padding-bottom: var(--sp-6); border-bottom: 1px solid var(--border); }
+      .sec > h2 { font-size: var(--fs-title-m); font-weight: var(--fw-semibold); margin: 0 0 var(--sp-2); }
+      .sec > p { color: var(--text-tertiary); font-size: var(--fs-label-m); margin: 0 0 var(--sp-4); }
+      .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); }
+      .row + .row { margin-top: var(--sp-4); }
+      .lbl { font-size: var(--fs-label-s); color: var(--text-tertiary); width: 100%; }
+      .tt { color: var(--text-primary); text-decoration: none; font-weight: var(--fw-semibold); }
+    </style>
+  </head>
+  <body>
+    <main class="gallery">
+      <header class="gallery__head">
+        <div>
+          <h1>컴포넌트 라이브러리</h1>
+          <p class="gallery__sub">DESIGN.md §4</p>
+        </div>
+        <div class="row" style="gap: var(--sp-3)">
+          <a class="tt" href="index.html">← 홈</a>
+          <button class="btn btn--basic btn--sm" data-theme-toggle>다크</button>
+        </div>
+      </header>
+
+      <!-- Button -->
+      <section class="sec">
+        <h2>Button</h2>
+        <p>Basic/Filled/Switch, Enabled/Pressed/Disabled, md/sm</p>
+        <div class="row">
+          <button class="btn btn--filled">Filled</button>
+          <button class="btn btn--filled is-pressed">Pressed</button>
+          <button class="btn btn--filled" disabled>Disabled</button>
+          <button class="btn btn--basic">Basic</button>
+          <button class="btn btn--switch">Switch</button>
+          <button class="btn btn--switch is-selected">Selected</button>
+        </div>
+        <div class="row">
+          <button class="btn btn--filled btn--sm">Small</button>
+          <button class="btn btn--basic btn--sm">Small</button>
+        </div>
+      </section>
+
+      <!-- Switch -->
+      <section class="sec">
+        <h2>Switch</h2>
+        <p>on = informative_active</p>
+        <div class="row">
+          <span class="switch"><span class="switch__knob"></span></span>
+          <span class="switch is-on"><span class="switch__knob"></span></span>
+          <span class="switch is-disabled"><span class="switch__knob"></span></span>
+        </div>
+      </section>
+
+      <!-- Text Field -->
+      <section class="sec">
+        <h2>Text Field</h2>
+        <p>Enabled, Focused, Typing(+clear), Error(+helper), Read only, Password</p>
+        <div class="row" style="flex-direction: column; align-items: stretch; max-width: 360px">
+          <span class="tfield"><input class="tfield__input" placeholder="Place holder" /></span>
+          <span class="tfield">
+            <input class="tfield__input" value="Typing" />
+            <button class="tfield__clear" title="지우기">✕</button>
+          </span>
+          <span class="tfield"><input class="tfield__input is-invalid" value="jiho@email" /></span>
+          <p class="tfield__helper" style="margin: 0">Please enter a valid email format</p>
+          <span class="tfield"><input class="tfield__input" value="Read only" readonly /></span>
+          <span class="tfield"><input class="tfield__input" type="password" value="•••••" /></span>
+          <span class="tfield tfield--sm"><input class="tfield__input" placeholder="Small" /></span>
+          <span class="tfield"><input class="tfield__input" value="Disabled" disabled /></span>
+        </div>
+      </section>
+
+      <!-- Number Field -->
+      <section class="sec">
+        <h2>Number Field</h2>
+        <p>자릿수별 셀, Enabled, Focused, Entered, Error, Large/Medium</p>
+        <div class="row">
+          <div class="numfield">
+            <span class="numfield__cell">3</span>
+            <span class="numfield__cell numfield__cell--focused"></span>
+            <span class="numfield__cell"></span>
+            <span class="numfield__cell"></span>
+          </div>
+          <div class="numfield numfield--error">
+            <span class="numfield__cell">3</span>
+            <span class="numfield__cell">1</span>
+          </div>
+          <div class="numfield numfield--md">
+            <span class="numfield__cell">7</span>
+            <span class="numfield__cell numfield__cell--focused"></span>
+            <span class="numfield__cell"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Checkbox -->
+      <section class="sec">
+        <h2>Checkbox</h2>
+        <p>checked = informative_active(green), Enabled/Pressed/Disabled</p>
+        <div class="row">
+          <span class="checkbox"><span class="checkbox__box">✓</span>미체크</span>
+          <span class="checkbox is-checked"><span class="checkbox__box">✓</span>체크</span>
+          <span class="checkbox is-pressed"><span class="checkbox__box">✓</span>눌림</span>
+          <span class="checkbox is-disabled"><span class="checkbox__box">✓</span>비활성</span>
+          <span class="checkbox is-disabled is-checked"><span class="checkbox__box">✓</span>체크+비활성</span>
+        </div>
+      </section>
+
+      <!-- Dropdown -->
+      <section class="sec">
+        <h2>Dropdown</h2>
+        <p>Prefix, Label, Suffix, Container, Medium/Small</p>
+        <div class="row">
+          <div class="dropdown">
+            <button class="dropdown__trigger">
+              <span class="dropdown__prefix">R</span>
+              <span class="dropdown__label">SKT</span>
+              <span class="dropdown__suffix">▾</span>
+            </button>
+            <div class="dropdown__container">
+              <div class="dropdown__item dropdown__item--selected">SKT</div>
+              <div class="dropdown__item">KT</div>
+              <div class="dropdown__item">LG U+</div>
+            </div>
+          </div>
+          <div class="dropdown dropdown--sm">
+            <button class="dropdown__trigger">
+              <span class="dropdown__label">Small</span>
+              <span class="dropdown__suffix">▾</span>
+            </button>
+            <div class="dropdown__container">
+              <div class="dropdown__item">옵션 1</div>
+              <div class="dropdown__item">옵션 2</div>
+            </div>
+          </div>
+          <div class="dropdown is-disabled">
+            <button class="dropdown__trigger">
+              <span class="dropdown__label">Disabled</span>
+              <span class="dropdown__suffix">▾</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <section class="sec">
+        <h2>Tabs (Segmented)</h2>
+        <p>Box/Line, Fitted</p>
+        <div class="row">
+          <div class="tabs tabs--box">
+            <div class="tabs__list">
+              <button class="tabs__tab tabs__tab--selected">전체</button>
+              <button class="tabs__tab">개인</button>
+              <button class="tabs__tab">업무</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="tabs tabs--line">
+            <div class="tabs__list">
+              <button class="tabs__tab tabs__tab--selected">FM</button>
+              <button class="tabs__tab">AM</button>
+              <button class="tabs__tab">추천</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="tabs tabs--box tabs--fitted" style="width: 320px">
+            <div class="tabs__list">
+              <button class="tabs__tab tabs__tab--selected">Fitted</button>
+              <button class="tabs__tab">균등</button>
+              <button class="tabs__tab">분할</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Indicator -->
+      <section class="sec">
+        <h2>Indicator</h2>
+        <p>Wide(pitch 24) / Narrow(pitch 16)</p>
+        <div class="row">
+          <span class="indicator indicator--wide">
+            <span class="indicator__dot indicator__dot--active"></span>
+            <span class="indicator__dot"></span>
+            <span class="indicator__dot"></span>
+            <span class="indicator__dot"></span>
+          </span>
+          <span class="indicator indicator--narrow">
+            <span class="indicator__dot indicator__dot--active"></span>
+            <span class="indicator__dot"></span>
+            <span class="indicator__dot"></span>
+            <span class="indicator__dot"></span>
+            <span class="indicator__dot"></span>
+          </span>
+        </div>
+      </section>
+
+      <!-- Page Navigation -->
+      <section class="sec">
+        <h2>Page Navigation</h2>
+        <p>Main/Depth, Subtitle</p>
+        <div class="row" style="flex-direction: column; align-items: stretch">
+          <nav class="pagenav" style="border-radius: var(--r-md); border: 1px solid var(--border)">
+            <span class="pagenav__appicon">R</span>
+            <span class="pagenav__menu">
+              <span class="pagenav__title">라디오 ▾</span>
+            </span>
+            <span class="pagenav__suffix">⋯</span>
+          </nav>
+          <nav class="pagenav" style="border-radius: var(--r-md); border: 1px solid var(--border)">
+            <span class="pagenav__back">‹</span>
+            <span class="pagenav__titles">
+              <span class="pagenav__title">상세 설정</span>
+              <span class="pagenav__subtitle">Bom's iPhone</span>
+            </span>
+            <span class="pagenav__suffix">⋯</span>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Controllers -->
+      <section class="sec">
+        <h2>Controllers</h2>
+        <p>Continuous/Floating/Centered Slider, Stepper</p>
+        <div class="row" style="flex-direction: column; align-items: stretch; max-width: 360px">
+          <div class="slider">
+            <span class="slider__icon">V</span>
+            <span class="slider__track"><span class="slider__fill" style="width: 60%"></span><span class="slider__handle" style="left: 60%"></span></span>
+          </div>
+          <div class="slider slider--floating">
+            <span class="slider__track"><span class="slider__fill" style="width: 35%"></span><span class="slider__handle" style="left: 35%"></span></span>
+          </div>
+          <div class="slider slider--centered">
+            <span class="slider__track"><span class="slider__fill" style="width: 100%"></span><span class="slider__handle" style="left: 50%"></span></span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="stepper" data-min="30" data-max="56" data-unit="A">
+            <button class="stepper__btn" data-dir="down">−</button>
+            <span class="stepper__value">48A</span>
+            <button class="stepper__btn" data-dir="up">+</button>
+          </span>
+        </div>
+      </section>
+
+      <!-- Picker -->
+      <section class="sec">
+        <h2>Spinner / Picker</h2>
+        <p>Date/Time, 중앙 하이라이트 + 거리 fade</p>
+        <div class="row">
+          <div class="picker picker--date">
+            <div class="picker__highlight"></div>
+            <div class="picker__column"><span class="picker__value">10</span><span class="picker__value picker__value--sel">12</span><span class="picker__value">2</span></div>
+            <div class="picker__column"><span class="picker__value">23</span><span class="picker__value picker__value--sel">25</span><span class="picker__value">27</span></div>
+            <div class="picker__column"><span class="picker__value">2022</span><span class="picker__value picker__value--sel">2024</span><span class="picker__value">2026</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Toast -->
+      <section class="sec">
+        <h2>Toast</h2>
+        <p>dark, max 792, pad 24, center</p>
+        <div class="row">
+          <button class="btn btn--basic btn--sm" onclick="UI.showToast('인증번호를 발송했습니다.')">기본 토스트</button>
+          <button class="btn btn--basic btn--sm" onclick="UI.showToast('전환에 실패했습니다.','danger')">에러 토스트</button>
+        </div>
+        <div class="row"><div class="toast"><span class="toast__text">Toast Message</span></div></div>
+      </section>
+
+      <!-- System Notification -->
+      <section class="sec">
+        <h2>System Notification</h2>
+        <p>App icon/Profile/Image, Button Align single/vertical/horizontal</p>
+        <div class="row" style="flex-direction: column; align-items: stretch; max-width: 420px">
+          <div class="sysnoti sysnoti--appicon">
+            <span class="sysnoti__imagery">P</span>
+            <div class="sysnoti__body">
+              <p class="sysnoti__title">계정 통합 완료</p>
+              <p class="sysnoti__desc">통합 계정으로 로그인할 수 있어요.</p>
+              <div class="sysnoti__actions sysnoti__actions--single"><button class="btn btn--filled btn--sm">시작하기</button></div>
+            </div>
+          </div>
+          <div class="sysnoti sysnoti--profile">
+            <span class="sysnoti__imagery">K</span>
+            <div class="sysnoti__body">
+              <p class="sysnoti__title">Name or Phone number</p>
+              <p class="sysnoti__desc">전화 수신 중</p>
+              <div class="sysnoti__actions sysnoti__actions--horizontal">
+                <button class="btn btn--sm sysnoti__btn--accept">받기</button>
+                <button class="btn btn--sm sysnoti__btn--reject">거절</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bar -->
+      <section class="sec">
+        <h2>Bar</h2>
+        <p>Window bar / Scroll bar</p>
+        <div class="row" style="height: 160px; background: var(--surface-high); border-radius: var(--r-md); padding: 0 var(--sp-4)">
+          <span class="wbar"><span class="wbar__handle"></span></span>
+          <span class="wbar is-pressed"><span class="wbar__handle"></span></span>
+          <span class="scrollbar"><span class="scrollbar__handle" style="height: 60%"></span></span>
+          <span class="scrollbar is-pressed"><span class="scrollbar__handle" style="height: 60%"></span></span>
+        </div>
+      </section>
+
+      <!-- Widgets -->
+      <section class="sec">
+        <h2>Widgets</h2>
+        <p>Handle, Pagination, Title, Information</p>
+        <div class="row" style="max-width: 360px">
+          <div class="widget" style="width: 100%">
+            <div class="widget__handle"></div>
+            <div class="widget__head">
+              <span class="widget__title">타이어 공기압</span>
+              <span class="widget__pagination indicator indicator--narrow">
+                <span class="indicator__dot indicator__dot--active"></span>
+                <span class="indicator__dot"></span>
+                <span class="indicator__dot"></span>
+              </span>
+            </div>
+            <div class="widget__info">32 psi, 32 psi, 34 psi, 32 psi</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Loading -->
+      <section class="sec">
+        <h2>Loading</h2>
+        <p>Linear / Tension</p>
+        <div class="row">
+          <span class="loading loading--linear"><span class="spinner"></span></span>
+          <span class="loading loading--tension"><span class="spinner"></span></span>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/components.js"></script>
+    <script>
+      UI.initTheme();
+    </script>
+  </body>
+</html>

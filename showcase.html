@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>** 계정 전환 UX 쇼케이스</title>
+    <!-- 로드 순서: tokens → style(base) → components → showcase -->
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/showcase.css" />
+  </head>
+  <body>
+    <div class="showcase">
+      <header class="showcase__bar">
+        <a class="showcase__back" href="index.html" aria-label="뒤로 가기">←</a>
+        <span class="showcase__title">** 계정 전환 UX 쇼케이스</span>
+        <span class="showcase__hint">왼쪽 리모컨으로 단계, 상태, 테마, 환경(Web/App)을 제어합니다</span>
+      </header>
+
+      <aside class="remote" id="remote" aria-label="시나리오 리모컨"></aside>
+
+      <section class="stage">
+        <div class="frame frame--web">
+          <div class="frame__label">Web</div>
+          <div class="frame__device">
+            <div class="frame__chrome">
+              <span class="frame__dot"></span>
+              <span class="frame__dot"></span>
+              <span class="frame__dot"></span>
+            </div>
+            <div class="frame__viewport" id="frame-web"></div>
+          </div>
+        </div>
+
+        <div class="frame frame--app">
+          <div class="frame__label">App</div>
+          <div class="frame__device">
+            <div class="frame__viewport" id="frame-app"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- components.js: 위임 인터랙션/토스트, screens.js: 흐름 SSOT, showcase.js: 상태·렌더 -->
+    <script src="js/components.js"></script>
+    <script src="js/screens.js"></script>
+    <script src="js/showcase.js"></script>
+  </body>
+</html>

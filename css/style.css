@@ -1,0 +1,458 @@
+/* =========================================================
+   style.css — Base 리셋 + 앱 셸/기존 컴포넌트
+   토큰은 tokens.css에서 로드된다. 로드 순서: tokens.css → style.css → components.css → [page].css
+   ========================================================= */
+
+/* =========================================================
+   Base
+   ========================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* =========================================================
+   App Shell (mobile-first, centered on web)
+   ========================================================= */
+.app {
+  max-width: var(--app-max);
+  min-height: 100vh;
+  margin: 0 auto;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+/* App bar */
+.appbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-4);
+  background: var(--surface);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.appbar__back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-left: -8px;
+  border-radius: var(--r-full);
+  font-size: 20px;
+  color: var(--color-text);
+}
+
+.appbar__back:active {
+  background: var(--color-surface-2);
+}
+
+.appbar__title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.appbar__brand {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+}
+
+/* Main content */
+.content {
+  flex: 1;
+  padding: var(--sp-6) var(--sp-5) var(--sp-10);
+}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero {
+  padding: var(--sp-4) 0 var(--sp-6);
+}
+
+.hero__badge {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: var(--sp-3);
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--r-full);
+}
+
+.hero__title {
+  margin: 0 0 var(--sp-2);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-base);
+}
+
+.hero__desc {
+  margin: 0;
+  color: var(--color-text-sub);
+  font-size: 15px;
+}
+
+/* =========================================================
+   Card
+   ========================================================= */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6) var(--sp-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.card + .card {
+  margin-top: var(--sp-4);
+}
+
+/* Clickable category card */
+.cat-card {
+  display: block;
+  color: inherit;
+  transition: box-shadow var(--dur-standard) var(--ease-standard),
+    transform 0.08s ease, border-color 0.12s ease;
+}
+.cat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+.cat-card:active { transform: scale(0.995); }
+
+/* 비공개(잠금) 카드 — 딤드 처리, 진입 차단 */
+.cat-card--locked {
+  opacity: 0.45;
+  filter: grayscale(1);
+  pointer-events: none;
+  user-select: none;
+  box-shadow: none;
+}
+.cat-card--locked .cat-card__go { color: var(--text-tertiary); }
+
+.cat-card__go {
+  display: inline-block;
+  margin-top: var(--sp-4);
+  color: var(--color-primary);
+  font-size: var(--fs-body-s);
+  font-weight: var(--fw-semibold);
+}
+
+.card__icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-4);
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+  border-radius: var(--r-md);
+  font-size: 24px;
+}
+
+.card__title {
+  margin: 0 0 var(--sp-2);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card__desc {
+  margin: 0 0 var(--sp-5);
+  color: var(--color-text-sub);
+  font-size: 14px;
+}
+
+/* Benefit list */
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+.benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.benefits li::before {
+  content: "✓";
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+/* =========================================================
+   Steps
+   ========================================================= */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: var(--sp-6);
+}
+
+.steps__item {
+  position: relative;
+  display: flex;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-5);
+}
+
+.steps__item:last-child {
+  padding-bottom: 0;
+}
+
+/* connector line */
+.steps__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.steps__num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-2);
+  color: var(--color-text-sub);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-full);
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.steps__item--active .steps__num {
+  background: var(--color-primary);
+  color: var(--basic-00);
+  border-color: var(--color-primary);
+}
+
+.steps__body {
+  padding-top: 3px;
+}
+
+.steps__label {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.steps__sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--color-text-weak);
+}
+
+/* =========================================================
+   Form
+   ========================================================= */
+.field {
+  margin-bottom: var(--sp-4);
+}
+
+.field__label {
+  display: block;
+  margin-bottom: var(--sp-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-sub);
+}
+
+.field__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 var(--sp-4);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  font-size: 15px;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.field__input::placeholder {
+  color: var(--color-text-weak);
+}
+
+.field__input:focus {
+  border-color: var(--color-primary);
+  background: var(--surface);
+}
+
+/* Selectable account row */
+.account-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.account--selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-weak);
+}
+
+.account__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-full);
+  font-size: 18px;
+}
+
+.account__meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.account__name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.account__id {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--color-text-weak);
+}
+
+.account__radio {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: var(--r-full);
+  border: 2px solid var(--color-border);
+  position: relative;
+}
+
+.account--selected .account__radio {
+  border-color: var(--color-primary);
+}
+
+.account--selected .account__radio::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: var(--color-primary);
+  border-radius: var(--r-full);
+}
+
+/* Sticky bottom action bar (mobile pattern) */
+.actionbar {
+  position: sticky;
+  bottom: 0;
+  padding: var(--sp-3) var(--sp-5)
+    calc(var(--sp-3) + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(
+    to top,
+    var(--color-surface) 70%,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.helper-text {
+  margin: var(--sp-4) 0 0;
+  font-size: 12px;
+  color: var(--color-text-weak);
+  text-align: center;
+}
+
+/* =========================================================
+   Responsive — web (wider viewport)
+   ========================================================= */
+@media (min-width: 768px) {
+  body {
+    padding: var(--sp-8) 0;
+  }
+
+  .app {
+    min-height: auto;
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .actionbar {
+    position: static;
+    background: none;
+  }
+}

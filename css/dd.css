@@ -1,0 +1,1182 @@
+/* =========================================================
+   dd.css — 다음 DD 에이전트 흐름 (스킨 SSOT: DAUM-DESIGN.md)
+   daum.net 프로덕션 실측 토큰(--daum-*)만 사용. 플랫 — 그림자 대신
+   #FFF vs #F2F4F7 표면 대비. 셸(리모컨/프레임)은 showcase.css 공유.
+   웹(@container ≥720px) = 콘텐츠 컬럼을 늘려 가운데 정렬만 한다.
+   ========================================================= */
+
+.dd {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--daum-bg);
+  font-family: var(--daum-font);
+  color: var(--daum-text);
+}
+
+/* D 심벌 원본 로고 (assets/daum/logo-d.svg) — 쓰는 곳마다 크기만 다름 */
+.dd__dlogo { display: block; width: 28px; height: 28px; }
+
+/* ---- 상태바 (디바이스 전용 — 웹 프레임에서는 숨김) ---- */
+.dd__status {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-5) 0;
+  font-size: var(--fs-label-s);
+  color: var(--daum-text-weak);
+}
+.dd__status b { font-weight: var(--fw-strong); color: var(--daum-text-sub); }
+.dd__batt {
+  display: inline-block;
+  width: 18px; height: 9px;
+  margin-left: var(--sp-1);
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  background: linear-gradient(to right, currentColor 80%, transparent 80%);
+  vertical-align: baseline;
+}
+@container (min-width: 720px) {
+  .dd__status { display: none; }
+}
+
+/* ---- 스크롤 영역 ---- */
+.dd__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.dd__scroll::-webkit-scrollbar { display: none; }
+
+.dd__home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  /* 좌우 20px — 다음 앱 실측 페이지 여백 (DAUM-DESIGN §4) */
+  padding: var(--sp-3) var(--sp-5) calc(var(--dd-tab-h) + var(--sp-8));
+}
+@container (min-width: 720px) {
+  .dd__home {
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--sp-6) 0 var(--sp-10);
+  }
+}
+
+/* ---- 상단 앱바 (메뉴 · 벨 — 앱 홈 실측) ---- */
+.dd__appbar {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-1) 0;
+  color: var(--daum-text);
+}
+.dd__appbar-ic {
+  display: inline-flex;
+  padding: var(--sp-1);
+  border: none;
+  background: none;
+  color: inherit;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.dd__appbar-ic:hover { background: var(--daum-hover); }
+.dd__appbar-ic--right { margin-left: auto; }
+
+/* ---- 검색바 — 흰 pill + 브랜드 그라데이션 보더 + D 로고 (실측 시그니처) ---- */
+.dd__search {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 48px;
+  padding: 0 var(--sp-2) 0 var(--sp-3);
+  border-radius: var(--dd-chip-radius);
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--daum-bg), var(--daum-bg)) padding-box,
+    var(--daum-grad) border-box;
+  color: var(--daum-text-weak);
+  font-size: var(--fs-body-m);
+  transition: box-shadow var(--dur-fast) var(--daum-ease);
+}
+.dd__search:focus-within { box-shadow: 0 0 0 3px rgba(30, 132, 255, 0.16); } /* bg-blue-16 실측 */
+.dd__search .dd__dlogo { width: 30px; height: 30px; }
+
+/* 실제 입력 가능한 필드 — 컨테이너(검색바/입력바)가 시각을 담당, 필드는 투명 */
+.dd__field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--daum-text);
+}
+.dd__field::placeholder { color: var(--daum-text-weak); }
+.dd__mic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px; height: 34px;
+  border: none;
+  border-radius: var(--r-full);
+  background: none;
+  color: var(--daum-text-sub);
+  cursor: pointer;
+}
+.dd__mic:hover { background: var(--daum-hover); }
+.dd__mic--fill { background: var(--daum-bluegray); color: var(--static-white); }
+
+/* ---- 홈 카드 공통 — 플랫 회색 카드(#F2F4F7), 그림자 없음 (실측) ---- */
+.dd__card,
+.dd__brief {
+  background: var(--daum-card);
+  border-radius: var(--daum-r-card);
+  padding: var(--sp-4);
+}
+
+/* ---- 브리핑 카드 (A1) ---- */
+.dd__brief { cursor: pointer; transition: background var(--dur-fast) var(--daum-ease); }
+.dd__brief:hover { background: color-mix(in srgb, var(--daum-card) 88%, var(--daum-text) 4%); }
+.dd__brief header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-label-m);
+  color: var(--daum-text-weak);
+}
+.dd__brief header b { color: var(--daum-text); font-weight: var(--fw-strong); }
+.dd__brief header .dd__chip--sm { margin-left: auto; }
+.dd__brief h3 {
+  margin: var(--sp-3) 0 var(--sp-2);
+  font-size: var(--fs-title-s);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-base);
+}
+.dd__brief ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dd__brief li {
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--daum-divider);
+  font-size: var(--fs-body-s);
+  color: var(--daum-text-sub);
+}
+.dd__brief li:last-child { border-bottom: none; }
+.dd__brief li b { font-weight: var(--fw-strong); }
+.dd__up { color: var(--daum-red); } /* 시세 상승 = 레드 (국내 관례, 실측 --text-red) */
+
+/* ---- 자주 쓰는 기능 (시간대별 재배열) ---- */
+.dd__shortcuts {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-2);
+}
+.dd__shortcut {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: 11px; /* 6칸 그리드에서 4글자 라벨까지 한 줄 유지 */
+  color: var(--daum-text-sub);
+  cursor: pointer;
+}
+.dd__shortcut b { font-weight: var(--fw-regular); white-space: nowrap; }
+.dd__shortcut:hover .dd__shortcut-ic { background: var(--daum-hover); }
+.dd__shortcut-ic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: var(--r-full);
+  background: var(--daum-bg);
+  font-style: normal;
+  font-size: var(--fs-body-s);
+  font-weight: var(--fw-strong);
+}
+.dd__badge {
+  position: absolute;
+  top: -2px; right: 50%;
+  transform: translateX(18px);
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: var(--r-full);
+  background: var(--daum-red); /* bg-point-red 실측 */
+  color: var(--static-white);
+  font-style: normal;
+  font-size: 10px; /* 뱃지 카운트 — 시스템 뱃지 관례 */
+  font-weight: var(--fw-strong);
+  line-height: 16px;
+  text-align: center;
+}
+.dd__caption {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-label-s);
+  color: var(--daum-text-weak);
+}
+
+/* ---- 대기 중 슬롯 ---- */
+.dd__pending header {
+  font-size: var(--fs-label-m);
+  color: var(--daum-text-weak);
+  margin-bottom: var(--sp-2);
+}
+.dd__pending header b { color: var(--daum-text); font-weight: var(--fw-strong); }
+.dd__pending-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--daum-divider);
+  font-size: var(--fs-body-s);
+  color: var(--daum-text-sub);
+}
+.dd__pending-row:last-child { border-bottom: none; }
+.dd__pending-row i { font-style: normal; color: var(--daum-text-weak); }
+
+/* ---- 루틴 제안 (S8, 기획서 A6) · 작업 목록 (S9, A8) ---- */
+.dd__page-title {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-title-l);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-base);
+}
+/* 탭 페이지 헤더 — 활성 탭 아이콘 + 제목 */
+.dd__page-title--tab {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.dd__page-ic { display: inline-flex; }
+.dd__page-desc {
+  margin: 0;
+  font-size: var(--fs-body-s);
+  color: var(--daum-text-sub);
+  line-height: var(--lh-base);
+}
+.dd__page-desc b { font-weight: var(--fw-strong); color: var(--daum-text); }
+.dd__routine-head {
+  font-size: var(--fs-label-m);
+  font-weight: var(--fw-strong);
+  color: var(--daum-text);
+  margin-bottom: var(--sp-2);
+}
+.dd__routine-steps {
+  margin: 0;
+  padding: 0 0 0 var(--sp-5);
+  font-size: var(--fs-body-s);
+  color: var(--daum-text-sub);
+}
+.dd__routine-steps li { padding: var(--sp-1) 0; }
+.dd__routine-cta { height: 50px; }
+.dd__routine-never {
+  margin: var(--sp-1) 0 0;
+  text-align: center;
+  font-size: var(--fs-label-s);
+  color: var(--daum-text-weak);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.dd__tasks { display: flex; flex-direction: column; padding: var(--sp-2) var(--sp-4); }
+.dd__task {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--daum-divider);
+}
+.dd__task:last-child { border-bottom: none; }
+.dd__task-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.dd__task-body b { font-size: var(--fs-body-s); font-weight: var(--fw-strong); color: var(--daum-text); }
+.dd__task-badge {
+  align-self: flex-start;
+  padding: 1px var(--sp-2);
+  border-radius: var(--dd-chip-radius);
+  background: rgba(30, 132, 255, 0.16); /* bg-blue-16 실측 */
+  color: var(--daum-blue);
+  font-style: normal;
+  font-size: var(--fs-label-s);
+  font-weight: var(--fw-strong);
+}
+.dd__task-meta { font-size: var(--fs-label-s); color: var(--daum-text-weak); }
+.dd__task-meta .dd__task-prog { color: var(--daum-blue); font-weight: var(--fw-strong); }
+.dd__task-sub { font-size: var(--fs-label-s); color: var(--daum-text-weak); }
+.dd__task .dd__chip--sm { flex-shrink: 0; }
+
+/* ---- 칩 — 실측 pill 버튼 (흰 배경 + border-button rgba(0,0,0,.1)) ---- */
+.dd__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  height: 34px;
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--daum-border-btn);
+  border-radius: var(--dd-chip-radius);
+  background: var(--daum-bg);
+  color: var(--daum-text-sub);
+  font-family: inherit;
+  font-size: var(--fs-label-m);
+  font-weight: var(--fw-strong);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--daum-ease);
+}
+.dd__chip:hover { background: var(--daum-hover); }
+.dd__chip--sm { height: 28px; padding: 0 var(--sp-3); font-size: var(--fs-label-s); }
+.dd__chip--suggest {
+  background: var(--daum-bluegray); /* bg-snackbar 실측 */
+  border-color: var(--daum-bluegray);
+  color: var(--static-white);
+}
+.dd__chip--suggest:hover { background: color-mix(in srgb, var(--daum-bluegray) 88%, #fff 12%); }
+.dd__chip--undo b { font-weight: var(--fw-strong); }
+
+/* ---- 전역 FAB (스펙 §2.1: 하단 탭 위 16, 우측 16, 56 원형) ---- */
+.dd__fab {
+  position: absolute;
+  right: var(--sp-4);
+  bottom: calc(var(--dd-tab-h) + var(--sp-4));
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dd-fab-size);
+  height: var(--dd-fab-size);
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--daum-grad); /* 브랜드 그라데이션 원본 */
+  color: var(--static-white);
+  box-shadow: var(--shadow-2);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--daum-ease), box-shadow var(--dur-fast) var(--daum-ease);
+}
+.dd__fab:hover { transform: scale(1.06); box-shadow: var(--shadow-3); }
+.dd__fab:active { transform: scale(0.94); }
+
+/* ---- 하단 5탭 — 아웃라인 아이콘 + 11px 라벨, 활성 아이콘만 그라데이션 (실측) ---- */
+.dd__tabbar {
+  flex-shrink: 0;
+  display: flex;
+  height: var(--dd-tab-h);
+  background: var(--daum-bg);
+  border-top: 1px solid var(--daum-divider);
+}
+.dd__tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--daum-text-sub);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--daum-ease);
+}
+.dd__tab:hover { background: var(--daum-hover); }
+.dd__tab b {
+  font-size: 11px; /* 실측 탭 라벨 */
+  font-weight: var(--fw-regular);
+}
+.dd__tab--active { color: var(--daum-text); }
+.dd__tab--active b { font-weight: var(--fw-strong); }
+
+/* =========================================================
+   S2 · 잠금화면 선톡 (A7) — Static Dark 배경, 테마 불변
+   ========================================================= */
+.dd--lock { background: var(--static-dark); }
+.dd--lock .dd__status { color: var(--static-white-300); }
+.dd--lock .dd__status b { color: var(--static-white); }
+.dd__lock-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-6) var(--sp-5);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.dd__lock-body::-webkit-scrollbar { display: none; }
+@container (min-width: 720px) {
+  .dd__lock-body { max-width: 560px; width: 100%; margin: 0 auto; }
+}
+.dd__lock-time {
+  margin-top: var(--sp-6);
+  text-align: center;
+  font-size: var(--fs-headline-l);
+  font-weight: var(--fw-extrabold);
+  color: var(--static-white);
+  letter-spacing: 0.02em;
+}
+.dd__lock-date {
+  text-align: center;
+  margin-bottom: var(--sp-6);
+  font-size: var(--fs-body-s);
+  color: var(--static-white-300);
+}
+
+/* 알림 카드 — 잠금화면 위 라이트 카드(Static, 테마 불변) */
+.dd__noti {
+  background: var(--static-white);
+  color: var(--static-dark);
+  border-radius: var(--dd-radius);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-2);
+  cursor: pointer;
+}
+.dd__noti--ad { opacity: 0.82; cursor: default; }
+.dd__noti header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-label-m);
+  color: rgba(19, 20, 23, 0.64); /* static_dark_300 상당 — 잠금 카드 전용 */
+}
+.dd__noti header b { color: var(--static-dark); font-weight: var(--fw-strong); }
+.dd__noti header b em { font-style: normal; font-weight: var(--fw-regular); color: rgba(19, 20, 23, 0.64); }
+.dd__noti header span { margin-left: auto; }
+.dd__noti-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: var(--r-xs);
+  background: var(--static-white);
+  border: 1px solid rgba(19, 20, 23, 0.08);
+  color: var(--static-dark);
+  font-style: normal;
+  font-size: var(--fs-label-s);
+  font-weight: var(--fw-extrabold);
+  overflow: hidden;
+}
+.dd__noti-ic .dd__dlogo { width: 18px; height: 18px; }
+.dd__noti h4 {
+  margin: var(--sp-2) 0 2px;
+  font-size: var(--fs-body-m);
+  font-weight: var(--fw-strong);
+  line-height: var(--lh-base);
+}
+.dd__noti p { margin: 0; font-size: var(--fs-body-s); color: rgba(19, 20, 23, 0.84); }
+/* 선톡 규칙(A7): 끄기 진입점 */
+.dd__noti footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: 1px solid rgba(19, 20, 23, 0.08);
+  font-size: var(--fs-label-s);
+  color: rgba(19, 20, 23, 0.64);
+}
+.dd__noti footer button {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--fs-label-s);
+  font-weight: var(--fw-strong);
+  color: rgba(19, 20, 23, 0.64);
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   S3~S6 · 대화 시트 — 딤 배경 + 바텀 시트
+   ========================================================= */
+.dd--chat { background: var(--daum-bg); }
+.dd__dim {
+  position: absolute;
+  inset: 0;
+  background: var(--static-dark-200);
+  opacity: 0.45;
+  cursor: pointer;
+}
+.dd__sheet {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: 88%;
+  background: var(--daum-bg);
+  border-radius: var(--daum-r-card) var(--daum-r-card) 0 0;
+  box-shadow: var(--shadow-3);
+}
+@container (min-width: 720px) {
+  .dd__sheet {
+    width: 100%;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+.dd__handle {
+  flex-shrink: 0;
+  width: 44px; height: 4px;
+  margin: var(--sp-2) auto 0;
+  border-radius: var(--r-full);
+  background: var(--daum-border-btn);
+}
+.dd__sheet-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 1px solid var(--daum-divider);
+  font-size: var(--fs-body-m);
+  font-weight: var(--fw-strong);
+}
+.dd__close {
+  margin-left: auto;
+  width: 28px; height: 28px;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--daum-card);
+  color: var(--daum-text-weak);
+  font-size: var(--fs-label-m);
+  cursor: pointer;
+}
+.dd__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: var(--r-full);
+  background: var(--daum-bg);
+  border: 1px solid var(--daum-divider);
+  font-style: normal;
+  overflow: hidden;
+}
+.dd__avatar .dd__dlogo { width: 22px; height: 22px; }
+
+/* 메시지 영역 */
+.dd__msgs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.dd__msgs::-webkit-scrollbar { display: none; }
+
+/* 컨텍스트 칩 — 진입 맥락 승계 (스펙 §2.2) */
+.dd__context {
+  align-self: center;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--dd-chip-radius);
+  background: var(--daum-card);
+  font-size: var(--fs-label-s);
+  color: var(--daum-text-weak);
+}
+
+.dd__msg { display: flex; gap: var(--sp-2); }
+.dd__msg--ai { align-items: flex-start; }
+.dd__msg--user { justify-content: flex-end; }
+.dd__bubble {
+  max-width: 82%;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--dd-bubble-radius);
+  background: var(--daum-card);
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-base);
+  color: var(--daum-text-sub);
+}
+.dd__msg--ai .dd__bubble { border-top-left-radius: var(--r-xs); }
+
+/* 도구 호출 과정 — 버블 안 상단, 흰 인셋 카드 */
+.dd__toolrun {
+  margin-bottom: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--daum-r-sm);
+  background: var(--daum-bg);
+}
+.dd__toolrun-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 2px 0;
+  font-size: var(--fs-label-s);
+  color: var(--daum-text-weak);
+}
+.dd__toolrun-row code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  color: var(--daum-text-sub);
+  background: var(--daum-card);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+.dd__toolrun-desc {
+  flex: 1;
+  min-width: 0;
+  word-break: keep-all; /* 한국어 어절 단위 줄바꿈 — 단어 중간에서 끊지 않는다 */
+}
+.dd__toolrun-row i {
+  font-style: normal;
+  font-weight: var(--fw-strong);
+  color: var(--daum-blue); /* 완료 체크 — indicator-activated */
+}
+.dd__toolrun-row--wait i { color: var(--daum-text-weak); }
+.dd__msg--user .dd__bubble {
+  background: var(--daum-bluegray); /* bg-snackbar 실측 */
+  color: var(--static-white);
+  border-top-right-radius: var(--r-xs);
+}
+.dd__bubble p { margin: 0 0 var(--sp-2); }
+.dd__bubble p:last-child { margin-bottom: 0; }
+.dd__bubble b { font-weight: var(--fw-strong); }
+
+/* 요약 글 리스트 */
+.dd__posts { display: flex; flex-direction: column; }
+.dd__post {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--daum-divider);
+}
+.dd__post:last-child { border-bottom: none; }
+.dd__post i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: var(--r-full);
+  background: var(--daum-bg);
+  font-style: normal;
+  font-size: var(--fs-label-s);
+  font-weight: var(--fw-strong);
+}
+.dd__post span { display: flex; flex-direction: column; min-width: 0; }
+.dd__post b { font-size: var(--fs-body-s); font-weight: var(--fw-strong); color: var(--daum-text); }
+.dd__post em { font-style: normal; font-size: var(--fs-label-s); color: var(--daum-text-weak); }
+
+.dd__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+.dd__suggest { display: flex; justify-content: flex-end; }
+
+/* 프레스 피드백 — 모든 탭 가능한 요소 공통 */
+.dd .btn,
+.dd__chip,
+.dd__vbtn,
+.dd__send,
+.dd__tab,
+.dd__shortcut {
+  transition: transform var(--dur-fast) var(--ease-spring), background var(--dur-fast) var(--daum-ease);
+}
+.dd .btn:active,
+.dd__chip:active,
+.dd__send:active,
+.dd__tab:active,
+.dd__shortcut:active { transform: scale(0.96); }
+
+/* dd 스킨 버튼 — CTA는 다음 포인트 블루 (indicator-activated #1E84FF) */
+.dd .btn--filled {
+  background: var(--daum-blue);
+  color: var(--static-white);
+  border-radius: var(--daum-r-sm);
+}
+.dd .btn--filled:hover { background: color-mix(in srgb, var(--daum-blue) 88%, #000 12%); }
+.dd .btn--outline {
+  background: var(--daum-bg);
+  border: 1px solid var(--daum-border-btn);
+  border-radius: var(--daum-r-sm);
+  color: var(--daum-text-sub);
+  font-weight: var(--fw-strong);
+}
+
+/* 권한 카드 — 최소 권한 연동 (그 작업에만, 언제든 해제) */
+.dd__perm b { display: block; font-size: var(--fs-body-m); margin-bottom: var(--sp-1); color: var(--daum-text); }
+.dd__perm p { color: var(--daum-text-weak); }
+.dd__perm-btn { height: 44px; border-radius: var(--daum-r-sm); margin-top: var(--sp-2); }
+.dd__perm-ok { color: var(--daum-text-weak); }
+.dd__perm-ok::before {
+  content: "✓";
+  margin-right: var(--sp-1);
+  color: var(--success); /* 연결 성공 상태 — informative */
+  font-weight: var(--fw-extrabold);
+}
+
+/* L3 확인 카드 — 되돌릴 수 없는 발송 (A5) */
+.dd__confirm b { display: block; font-size: var(--fs-body-m); color: var(--daum-text); margin-bottom: var(--sp-2); }
+.dd__confirm-row {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--daum-divider);
+  font-size: var(--fs-body-s);
+}
+.dd__confirm-row span { flex-shrink: 0; width: 64px; color: var(--daum-text-weak); }
+.dd__confirm-row em { font-style: normal; color: var(--daum-text); }
+.dd__confirm-warn {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-label-s);
+  color: var(--daum-red); /* 비가역 경고 — text-red 실측 */
+}
+.dd__confirm--error .dd__confirm-warn { font-weight: var(--fw-strong); }
+.dd__confirm-actions { display: flex; gap: var(--sp-2); }
+.dd__confirm-actions .btn { flex: 1; }
+.dd__done { color: var(--success); }
+
+/* 입력바 — 회색 필 pill (실측 bg-on-slot) */
+.dd__input {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: var(--sp-2) var(--sp-5) var(--sp-4);
+  padding: 0 var(--sp-1) 0 var(--sp-4);
+  height: 46px;
+  border: none;
+  border-radius: var(--dd-chip-radius);
+  background: var(--daum-card);
+  font-size: var(--fs-body-s);
+  color: var(--daum-text-weak);
+}
+.dd__input .dd__mic { width: 36px; height: 36px; }
+
+/* 전송 버튼 — 입력 중에만 마이크 대신 표시 (브랜드 그라데이션) */
+.dd__send {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border: none;
+  border-radius: var(--r-full);
+  background: var(--daum-grad);
+  color: var(--static-white);
+  font-family: inherit;
+  font-size: var(--fs-body-l);
+  font-weight: var(--fw-extrabold);
+  cursor: pointer;
+}
+.dd__input.has-text .dd__send { display: inline-flex; }
+.dd__input.has-text .dd__mic--fill { display: none; }
+
+/* =========================================================
+   S7 · 음성 대화 (기획서 A3 브리핑 낭독 + A4 실시간 프리톡)
+   Static Dark 배경(테마 불변) — 핸즈프리 오디오 퍼스트 화면
+   ========================================================= */
+.dd--voice { background: var(--static-dark); }
+.dd--voice .dd__status { color: var(--static-white-300); }
+.dd--voice .dd__status b { color: var(--static-white); }
+.dd__voice {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-5) var(--sp-6);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.dd__voice::-webkit-scrollbar { display: none; }
+@container (min-width: 720px) {
+  .dd__voice { max-width: 560px; width: 100%; margin: 0 auto; }
+}
+.dd__live {
+  width: 7px; height: 7px;
+  border-radius: var(--r-full);
+  background: var(--daum-red); /* 실시간 표시 — bg-point-red-live 계열 */
+  animation: dd-live 1.4s linear infinite; /* 원본 liveDot: 스텝 점멸 */
+}
+
+/* 오브 — 정적 원 (펄스 없음, 심플) */
+.dd__orb {
+  position: relative;
+  width: 132px; height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-full);
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08) 62%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.dd__orb-core {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px; height: 68px;
+  border-radius: var(--r-full);
+  background: var(--static-white);
+}
+.dd__orb-core .dd__dlogo { width: 46px; height: 46px; }
+
+/* 파형 — 발화 중 시각 피드백 */
+.dd__wave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+}
+.dd__wave i {
+  width: 3px;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--static-white-300);
+  animation: dd-wave 1.1s ease-in-out infinite;
+}
+.dd__wave i:nth-child(2n) { animation-delay: 0.12s; }
+.dd__wave i:nth-child(3n) { animation-delay: 0.24s; height: 14px; }
+.dd__wave i:nth-child(4n) { animation-delay: 0.36s; }
+.dd__wave i:nth-child(5n) { animation-delay: 0.48s; height: 11px; }
+
+/* 상태 힌트 — 한 줄 + 보조 한 줄 */
+.dd__voice-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-body-m);
+  font-weight: var(--fw-strong);
+  color: var(--static-white);
+}
+
+/* 컨트롤 */
+.dd__voice-ctrl {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-6);
+}
+.dd__vbtn {
+  height: 42px;
+  padding: 0 var(--sp-5);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--dd-chip-radius);
+  background: none;
+  color: var(--static-white);
+  font-family: inherit;
+  font-size: var(--fs-label-m);
+  font-weight: var(--fw-strong);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-spring);
+}
+.dd__vbtn:hover { background: rgba(255, 255, 255, 0.12); }
+.dd__vbtn:active { transform: scale(0.94); }
+.dd__vbtn--end { background: var(--static-white); color: var(--static-dark); border-color: var(--static-white); }
+
+@keyframes dd-wave {
+  0%, 100% { transform: scaleY(0.6); }
+  50% { transform: scaleY(2.1); }
+}
+/* 다음 원본 liveDot 이식 — 스텝 점멸 */
+@keyframes dd-live {
+  0%, 25% { opacity: 1; }
+  50%, 75% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+/* ---- 토스트 / 로딩 (디바이스 화면 안) ---- */
+.dd__toast {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-6);
+  transform: translateX(-50%);
+  z-index: 6;
+  width: max-content;
+  max-width: calc(100% - (var(--sp-6) * 2));
+}
+/* 탭바가 있는 화면에서는 탭바 위로 (가려지지 않게) */
+.dd:has(.dd__tabbar) .dd__toast { bottom: calc(var(--dd-tab-h) + var(--sp-4)); }
+.dd__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--daum-bg) 66%, transparent);
+  animation: dd-fade var(--dur-standard) var(--daum-ease);
+}
+/* 다음 원본 로딩 스피너 (SMIL rotate) — stroke는 currentColor */
+.dd__spin { color: var(--daum-text); }
+/* 토스트 = 다음 스낵바 (bg-snackbar #2C2E33) */
+/* 스낵바 — 다음 앱 규격. components.css의 값은 IVI 대형 디스플레이 실측
+   (상하 24·좌우 40)이라 모바일에는 과하므로 여기서 조인다. */
+.dd .toast {
+  padding: var(--sp-3) var(--sp-4); /* 12 · 16 */
+  border-radius: var(--daum-r-sm);  /* 8 — 실측 최다 라디우스 */
+  background: var(--daum-bluegray); /* bg-snackbar #2C2E33 */
+  box-shadow: var(--shadow-2);
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-base);
+}
+.dd .toast__text { word-break: keep-all; }
+
+/* ---- 전환 애니메이션 (transitions.dev 패턴 이식 — DESIGN §2.5) ---- */
+.dd__home.anim-fwd, .dd__voice.anim-fwd { animation: dd-slide-fwd var(--dur-standard) var(--ease-standard); }
+.dd__home.anim-back, .dd__voice.anim-back { animation: dd-slide-back var(--dur-standard) var(--ease-standard); }
+/* 시트 오픈 — Panel reveal: 스프링 오버슈트 + 딤 페이드인 (단계 전환 시 1회) */
+.dd__sheet.anim-fwd, .dd__sheet.anim-back { animation: dd-sheet-up var(--dur-slow) var(--ease-spring); }
+.dd__dim:has(+ .dd__sheet.anim-fwd) { animation: dd-dim-in var(--dur-slow) var(--daum-ease) both; }
+@keyframes dd-dim-in { from { opacity: 0; } to { opacity: 0.45; } }
+@keyframes dd-slide-fwd {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes dd-slide-back {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes dd-sheet-up {
+  from { opacity: 0.4; transform: translateY(48px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dd-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- 도구 실행 시퀀스 — 새 메시지(.dd__msg--new)에서 1회 재생 ----
+   순서: 유저 발화 라이즈 → 도구 행 순차 등장(스피너 회전) → 체크 팝 → 결과 등장.
+   등장 모션은 다음 원본 trend_rolling(translateY 30px) 이식. */
+@keyframes dd-trend-rolling {
+  0% { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 도구 없는 새 메시지(유저 발화 등): 즉시 라이즈. 도구 메시지 뒤에 오면 완료 후 등장 */
+.dd__msg--new:not(:has(.dd__toolrun)) { animation: dd-trend-rolling 0.35s var(--daum-ease) both; }
+.dd__msg--new ~ .dd__msg--new:not(:has(.dd__toolrun)) { animation-delay: 2s; }
+
+/* 도구 행: 순차 등장 */
+.dd__msg--new .dd__toolrun-row { animation: dd-trend-rolling 0.3s var(--daum-ease) both; }
+.dd__msg--new .dd__toolrun-row:nth-child(1) { animation-delay: 0.35s; }
+.dd__msg--new .dd__toolrun-row:nth-child(2) { animation-delay: 0.9s; }
+
+/* 실행 스피너 ↔ 체크 교대 슬롯 */
+.dd__toolrun-slot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+}
+.dd__toolrun-slot .dd__toolrun-ok { position: absolute; inset: 0; text-align: center; line-height: 14px; }
+.dd__toolrun-run {
+  display: none;
+  position: absolute; inset: 1px;
+  border: 2px solid var(--daum-divider);
+  border-top-color: var(--daum-blue);
+  border-radius: var(--r-full);
+}
+/* 새 메시지에서만: 스피너가 돌다가 사라지고 체크가 팝 */
+.dd__msg--new .dd__toolrun-run {
+  display: block;
+  animation: dd-spin 0.7s linear infinite, dd-vanish 0.01s linear forwards;
+}
+.dd__msg--new .dd__toolrun-row:nth-child(1) .dd__toolrun-run { animation-delay: 0.35s, 1.25s; }
+.dd__msg--new .dd__toolrun-row:nth-child(2) .dd__toolrun-run { animation-delay: 0.9s, 1.8s; }
+.dd__msg--new .dd__toolrun-slot .dd__toolrun-ok { opacity: 0; animation: dd-check 0.3s var(--ease-spring) both; }
+.dd__msg--new .dd__toolrun-row:nth-child(1) .dd__toolrun-ok { animation-delay: 1.25s; }
+.dd__msg--new .dd__toolrun-row:nth-child(2) .dd__toolrun-ok { animation-delay: 1.8s; }
+@keyframes dd-spin { to { transform: rotate(360deg); } }
+@keyframes dd-vanish { to { opacity: 0; visibility: hidden; } }
+
+/* 결과 콘텐츠: 도구 완료 후 등장 (--tr = 행 수) */
+.dd__msg--new .dd__tool-result {
+  animation: dd-trend-rolling 0.35s var(--daum-ease) both;
+  animation-delay: calc(var(--tr, 1) * 0.55s + 0.85s);
+}
+
+/* S3 제안 칩: 결과 다음 */
+.dd__msg--new + .dd__suggest {
+  animation: dd-trend-rolling 0.3s var(--daum-ease) both;
+  animation-delay: 2.3s;
+}
+
+/* 알림 카드 — 다음 원본 appAlarm 이식 (scale 0 → 1, 스태거) */
+.dd__lock-body.anim-fwd .dd__noti { animation: dd-app-alarm var(--dur-slow) var(--ease-spring) both; }
+.dd__lock-body.anim-fwd .dd__noti + .dd__noti { animation-delay: 120ms; }
+.dd__lock-body.anim-back .dd__noti { animation: dd-app-alarm var(--dur-slow) var(--ease-spring) both; }
+@keyframes dd-app-alarm {
+  0% { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 뱃지 — appAlarm 팝인 (기저 translateX 유지) */
+.dd__badge { animation: dd-badge-alarm var(--dur-slow) var(--ease-spring) both; }
+@keyframes dd-badge-alarm {
+  0% { opacity: 0; transform: translateX(18px) scale(0); }
+  to { opacity: 1; transform: translateX(18px) scale(1); }
+}
+
+/* 발송 완료 — Success check: blur + rotate pop */
+.dd__done {
+  display: inline-block;
+  animation: dd-check var(--dur-slow) var(--ease-spring) both;
+}
+@keyframes dd-check {
+  from { opacity: 0; transform: rotate(-90deg) scale(0.4); filter: blur(4px); }
+  to { opacity: 1; transform: rotate(0) scale(1); filter: blur(0); }
+}
+
+/* 접근성: 모션 최소화 */
+@media (prefers-reduced-motion: reduce) {
+  .dd__home.anim-fwd, .dd__home.anim-back,
+  .dd__lock-body.anim-fwd, .dd__lock-body.anim-back,
+  .dd__lock-body.anim-fwd .dd__noti, .dd__lock-body.anim-back .dd__noti,
+  .dd__sheet.anim-fwd, .dd__sheet.anim-back,
+  .dd__sheet.anim-fwd .dd__msgs > :last-child,
+  .dd__voice.anim-fwd, .dd__voice.anim-back,
+  .dd__badge, .dd__done, .dd__wave i, .dd__live,
+  .dd__dim:has(+ .dd__sheet.anim-fwd),
+  .dd__msg--new, .dd__msg--new .dd__toolrun-row,
+  .dd__msg--new .dd__toolrun-run, .dd__msg--new .dd__toolrun-slot .dd__toolrun-ok,
+  .dd__msg--new .dd__tool-result, .dd__msg--new + .dd__suggest,
+  .dd__overlay, .dd__fab,
+  .dd .btn, .dd__chip, .dd__vbtn, .dd__send, .dd__tab, .dd__shortcut {
+    animation: none;
+    transition: none;
+  }
+  /* 모션 없이도 최종 상태가 보이도록 */
+  .dd__msg--new .dd__toolrun-run { display: none; }
+  .dd__msg--new .dd__toolrun-slot .dd__toolrun-ok { opacity: 1; }
+}
+
+/* =========================================================
+   가이드 투어 — 검정 딤 + 스포트라이트 + 설명 카드
+   프레임(.dd) 안에 오버레이로 얹는다. 스포트라이트는 box-shadow
+   spread로 주변만 어둡게 덮어 대상 요소만 밝게 남긴다.
+   ========================================================= */
+.dd__guide {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  cursor: pointer;
+  animation: dd-fade var(--dur-fast) var(--daum-ease);
+}
+.dd__guide-spot {
+  position: absolute;
+  border-radius: var(--daum-r-card);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.72); /* 주변 딤 */
+  outline: 2px solid var(--static-white);
+  outline-offset: 0;
+  transition: all var(--dur-standard) var(--daum-ease);
+  pointer-events: none;
+}
+.dd__guide-tip {
+  position: absolute;
+  left: var(--sp-5);
+  right: var(--sp-5);
+  z-index: 2; /* 스포트라이트 아웃라인 위 */
+  padding: var(--sp-4);
+  border-radius: var(--daum-r-card);
+  background: var(--static-white);
+  color: var(--static-dark);
+  /* 딤 위에서는 진한 그림자가 지저분해진다 — 얕게 */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  animation: dd-trend-rolling 0.3s var(--daum-ease) both;
+}
+.dd__guide-tip b {
+  display: block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-body-m);
+  font-weight: var(--fw-extrabold);
+}
+.dd__guide-tip p {
+  margin: 0;
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-base);
+  color: rgba(19, 20, 23, 0.72);
+  word-break: keep-all;
+}
+.dd__guide-tip footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+.dd__guide-tip footer span {
+  flex: 1;
+  font-size: var(--fs-label-s);
+  color: rgba(19, 20, 23, 0.48);
+}
+.dd__guide-tip footer button {
+  height: 34px;
+  padding: 0 var(--sp-4);
+  border: 1px solid rgba(19, 20, 23, 0.1);
+  border-radius: var(--dd-chip-radius);
+  background: none;
+  color: rgba(19, 20, 23, 0.72);
+  font-family: inherit;
+  font-size: var(--fs-label-m);
+  font-weight: var(--fw-strong);
+  cursor: pointer;
+}
+.dd__guide-next {
+  background: var(--daum-grad) !important;
+  border-color: transparent !important;
+  color: var(--static-white) !important;
+}
+
+/* =========================================================
+   미리보기 하단 내비 (?preview=1) — 단계 이동 + 가이드 시작
+   ========================================================= */
+.dd-prevnav {
+  /* 프레임 아래 확보된 띠(--prevnav-h)에 고정 — 화면을 가리지 않는다 */
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-2);
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  border-radius: var(--dd-chip-radius);
+  background: var(--static-dark-200);
+  box-shadow: var(--shadow-2);
+  backdrop-filter: blur(8px);
+}
+.dd-prevnav button {
+  height: 34px;
+  min-width: 34px;
+  padding: 0 var(--sp-3);
+  border: none;
+  border-radius: var(--dd-chip-radius);
+  background: none;
+  color: var(--static-white);
+  font-family: var(--daum-font);
+  font-size: var(--fs-label-m);
+  font-weight: var(--fw-strong);
+  white-space: nowrap; /* 좁은 화면에서 글자가 세로로 깨지지 않게 */
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--daum-ease);
+}
+.dd-prevnav button:hover { background: rgba(255, 255, 255, 0.16); }
+.dd-prevnav__label {
+  padding: 0 var(--sp-2);
+  color: var(--static-white);
+  font-family: var(--daum-font);
+  font-size: var(--fs-label-m);
+  font-weight: var(--fw-strong);
+  white-space: nowrap;
+}
+.dd-prevnav__guide {
+  margin-left: var(--sp-1);
+  background: var(--daum-grad) !important;
+}
+.dd-prevnav.is-hidden { opacity: 0; pointer-events: none; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .dd__guide, .dd__guide-spot, .dd__guide-tip { animation: none; transition: none; }
+}

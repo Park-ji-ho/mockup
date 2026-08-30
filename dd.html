@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>다음 DD 에이전트 UX 쇼케이스</title>
+    <!-- 로드 순서: tokens → style(base) → components → showcase(셸 공유) → dd(흐름) -->
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/showcase.css" />
+    <link rel="stylesheet" href="css/dd.css" />
+  </head>
+  <body>
+    <!-- 공유 그라데이션 정의 — 두 프레임에 같은 HTML을 주입해도 url(#ddg)가
+         숨겨진 프레임의 중복 id에 걸리지 않도록 문서 레벨에 한 번만 둔다 -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="ddg" x1="0" y1="12" x2="24" y2="12" gradientUnits="userSpaceOnUse">
+          <stop offset=".08" stop-color="#4FA4FF" />
+          <stop offset=".31" stop-color="#E28EFF" />
+          <stop offset=".55" stop-color="#FF71A4" />
+          <stop offset=".79" stop-color="#FFA841" />
+          <stop offset="1" stop-color="#FFC236" />
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="showcase">
+      <header class="showcase__bar">
+        <a class="showcase__back" href="index.html" aria-label="뒤로 가기">←</a>
+        <span class="showcase__title">다음 DD 에이전트 UX 쇼케이스</span>
+        <span class="showcase__hint">왼쪽 리모컨으로 단계, 상태, 테마, 환경(Web/App)을 제어합니다</span>
+      </header>
+
+      <aside class="remote" id="remote" aria-label="시나리오 리모컨"></aside>
+
+      <section class="stage">
+        <div class="frame frame--web">
+          <div class="frame__label">Web</div>
+          <div class="frame__device">
+            <div class="frame__chrome">
+              <span class="frame__dot"></span>
+              <span class="frame__dot"></span>
+              <span class="frame__dot"></span>
+            </div>
+            <div class="frame__viewport" id="frame-web"></div>
+          </div>
+        </div>
+
+        <div class="frame frame--app">
+          <div class="frame__label">App</div>
+          <div class="frame__device">
+            <div class="frame__viewport" id="frame-app"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- components.js: 위임 인터랙션/토스트, dd-screens.js: 흐름 SSOT, dd-showcase.js: 상태·렌더 -->
+    <script src="js/components.js"></script>
+    <script src="js/dd-screens.js"></script>
+    <script src="js/dd-showcase.js"></script>
+  </body>
+</html>
